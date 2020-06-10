@@ -10,7 +10,11 @@ router.get('/posts', (req, res) => {
 });
 
 router.get('/categorias', (req, res) => {
-    res.send('Página de categorias');
+    res.render('../views/layouts/admin/categorias');
+});
+
+router.get('/categorias/add', (req, res) => {
+    res.render('../views/layouts/admin/add-categorias');
 });
 
 module.exports = router;
