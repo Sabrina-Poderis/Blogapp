@@ -2,7 +2,7 @@
     const express       = require('express');
     const handlebars    = require('express-handlebars')
     const bodyParser    = require('body-parser');
-    // const mongoose      = require('mongoose');
+    const mongoose      = require('mongoose');
     const app           = express();
     const path          = require('path');
     const admin         = require('./routes/admin');
@@ -15,7 +15,15 @@
         app.engine('handlebars', handlebars({defaultLayout: 'main'}));
         app.set('view engine', 'handlebars');
     // Mongoose
-
+        mongoose.Promise = global.Promise;
+        mongoose.connect('mongodb://localhost/blogapp', {
+            useNewUrlParser: true , 
+            useUnifiedTopology: true
+        }).then(()=>{
+            console.log("MongoDB Conectado...");
+        }).catch((erro)=>{
+            console.log("Houve um erro: " + erro);
+        });
     //Public
         app.use(express.static('public'));
     // Rotas
