@@ -1,7 +1,8 @@
-const express = require('express');
-const router = require('express').Router();
-const mongoose = require('mongoose');
 require('../models/Categoria');
+
+const express   = require('express');
+const router    = require('express').Router();
+const mongoose  = require('mongoose');
 const Categoria = mongoose.model('categorias');
 
 router.get('/', (req, res) => {
