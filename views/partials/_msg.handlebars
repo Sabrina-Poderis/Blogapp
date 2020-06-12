@@ -1,0 +1,23 @@
+{{#if success_msg}}
+    <div class="toast" data-autohide="false" style="position: absolute; top: 80px; right: 50px;">
+        <div class="toast-header">
+            <strong class="mr-auto text-success">{{success_msg}}</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+        </div>
+    </div>
+    <script>
+    $('.toast').toast('show');
+    </script>
+{{/if}}
+
+{{#if error_msg}}
+    <div class="toast" data-autohide="false" style="position: absolute; top: 80px; right: 50px;">
+        <div class="toast-header">
+            <strong class="mr-auto text-danger">{{error_msg}}</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+        </div>
+    </div>
+    <script>
+    $('.toast').toast('show');
+    </script>
+{{/if}}
