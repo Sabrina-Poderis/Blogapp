@@ -74,13 +74,22 @@ router.post('/categorias/edit/', (req, res) => {
            req.flash('success_msg', 'Categoria editada com sucesso!');
            res.redirect('/admin/categorias');
         }).catch((erro) => {
-            req.flash('error_msg', 'Erro ao salvar categoria! ' + erro);
+            req.flash('error_msg', 'Erro ao editar categoria! ' + erro);
             res.redirect('/admin/categorias');
         });
     }).catch((erro) => {
-        req.flash('error_msg', 'Erro ao salvar categoria! ' + erro);
+        req.flash('error_msg', 'Erro ao editar categoria! ' + erro);
         res.redirect('/admin/categorias');
     });
 });
 
+router.post('/categorias/deletar/', (req, res) => {
+    Categoria.deleteOne({_id: req.body.id}).then(() => {
+        req.flash('success_msg', 'Categoria excluida com sucesso!');
+        res.redirect('/admin/categorias');
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao deletar categoria! ' + erro);
+        res.redirect('/admin/categorias');
+    });
+});
 module.exports = router;

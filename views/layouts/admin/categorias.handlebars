@@ -1,28 +1,30 @@
-{{#if error_msg}}
-    <div class="toast" data-autohide="false" style="position: absolute; top: 80px; right: 50px;">
-        <div class="toast-header">
-            <strong class="mr-auto text-danger">{{error_msg}}</strong>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
-        </div>
-    </div>
-    <script>
-    $('.toast').toast('show');
-    </script>
-{{/if}}
-
 <h2>Lista de Categorias</h2>
 <hr/>
 <a href="/admin/categorias/add"><button type="button" class="btn btn-success">Nova Categoria</button></a>
 
-{{#each categorias}}
-    <div class="row-sm-6">
-        <div class="card mt-4">
-            <div class="card-body">
-                <h5 class="card-title">{{nome}}</h5>
-                <p class="card-text">{{slug}}<br/>Data: {{data}}</p>
-                <a href="/admin/categorias/edit/{{_id}}" class="btn btn-warning">Editar</a>
-                <a href="#" class="btn btn-danger">Excluir</a>
+{{#if categorias}}
+    {{#each categorias}}
+        <div class="row-sm-6">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{nome}}</h5>
+                    <p class="card-text">{{slug}}<br/>Data: {{data}}</p>
+                    <div class="row">
+                        <a href="/admin/categorias/edit/{{_id}}" class="mr-4 ml-3">
+                            <button class="btn btn-warning">
+                                Editar
+                            </button>
+                        </a>
+                        <form action="/admin/categorias/deletar" method="POST">
+                            <input type="hidden" name="id" value="{{_id}}"/>
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-{{/each}}
+    {{/each}}
+{{else}}
+    <hr class="mt-5"/>
+    <h2 class="text-center">Não existem categorias, crie uma!</h2>
+{{/if}}
