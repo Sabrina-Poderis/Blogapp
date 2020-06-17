@@ -1,33 +1,126 @@
 require('../models/Categoria');
+require('../models/Postagem');
 const express   = require('express');
 const router    = require('express').Router();
 const mongoose  = require('mongoose');
 const Categoria = mongoose.model('categorias');
+const Postagem  = mongoose.model('postagens');
 
 router.get('/', (req, res) => {
     res.render('../views/layouts/admin/index');
 });
 
-router.get('/posts', (req, res) => {
-    res.send('Página de posts');
+// -------------- //
+router.get('/postagens', (req, res) => {
+    Postagem.find().populate('categoria').sort({data:'desc'}).then((postagens) => {
+        res.render('../views/layouts/admin/Postagem/postagens', {postagens: postagens.map(postagens => postagens.toJSON())})
+    }).catch((erro) => {
+        req.flash('error_msg', 'Ocorreu um erro!' + erro);
+        res.redirect('/admin');
+    });
 });
+
+router.get('/postagens/add', (req, res) => {
+    Categoria.find().then((categorias) => {
+        res.render('../views/layouts/admin/Postagem/add-postagens', {categorias: categorias.map(categorias => categorias.toJSON())})
+    }).catch((erro) => {
+        req.flash('error_msg', 'Ocorreu um erro!' + erro);
+        res.redirect('/admin');
+    });
+});
+
+router.post('/postagens/nova', (req, res) => {
+    var erros = []
+
+    if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null){
+        erros.push({texto: 'Título inválido'});
+    } else if(req.body.titulo.length < 2){
+        erros.push({texto: "Título é muito pequeno"});
+    }
+
+    if(erros.length > 0){
+        res.render('../views/layouts/admin/Postagem/add-postagens', {erros: erros});
+    } else {
+        const novaPostagem = {
+            titulo   : req.body.titulo,
+            slug     : req.body.slug,
+            descricao: req.body.descricao,
+            conteudo : req.body.conteudo,
+            categoria: req.body.categoria
+        };
+    
+        new Postagem(novaPostagem).save().then(() => {
+            req.flash('success_msg', 'Postagem salva com sucesso!');
+            res.redirect('/admin/postagens');
+        }).catch((erro) => {
+            req.flash('error_msg', 'Ocorreu um erro!' + erro);
+            res.redirect('/admin/postagens');
+        });
+    }
+});
+
+router.get('/postagens/edit/:id', (req, res) => {
+    Postagem.findOne({_id:req.params.id}).lean().then((postagem) => {
+        Categoria.find().lean().then((categorias) => {
+            res.render('../views/layouts/admin/Postagem/edit-postagens', {categorias: categorias, postagem: postagem});
+        }).catch(() => {
+            req.flash('error_msg', 'Erro! Não foi possível listar as categorias');
+            res.redirect('/admin/postagens');
+        });
+    }).catch(() => {
+        req.flash('error_msg', 'Erro! Não foi possível editar a postagem porque ela não existe');
+        res.redirect('/admin/postagens');
+    });
+});
+
+router.post('/postagens/edit/', (req, res) => {
+    Postagem.findOne({_id:req.body.id}).then((postagem) => {
+        postagem.titulo    = req.body.titulo;
+        postagem.slug      = req.body.slug;
+        postagem.descricao = req.body.descricao;
+        postagem.conteudo  = req.body.conteudo;
+        postagem.categoria = req.body.categoria;
+       
+        postagem.save().then(() => {
+           req.flash('success_msg', 'Postagem editada com sucesso!');
+           res.redirect('/admin/postagens');
+        }).catch((erro) => {
+            req.flash('error_msg', 'Erro ao editar postagem! ' + erro);
+            res.redirect('/admin/postagens');
+        });
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao editar postagem! ' + erro);
+        res.redirect('/admin/postagens');
+    });
+});
+
+router.post('/postagens/deletar/', (req, res) => {
+    Postagem.deleteOne({_id: req.body.id}).then(() => {
+        req.flash('success_msg', 'Postagem excluida com sucesso!');
+        res.redirect('/admin/postagens');
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao deletar postagem! ' + erro);
+        res.redirect('/admin/postagens');
+    });
+});
+// -------------- //
 
 router.get('/categorias', (req, res) => {
     Categoria.find().sort({data:'desc'}).then((categorias) => {
-        res.render('../views/layouts/admin/categorias', {categorias: categorias.map(categorias => categorias.toJSON())})
+        res.render('../views/layouts/admin/Categoria/categorias', {categorias: categorias.map(categorias => categorias.toJSON())})
     }).catch((erro) => {
         req.flash('error_msg', 'Ocorreu um erro!' + erro);
-        res.redirect('/admin/categorias');
-    })
+        res.redirect('/admin');
+    });
 });
 
 router.get('/categorias/add', (req, res) => {
-    res.render('../views/layouts/admin/add-categorias');
+    res.render('../views/layouts/admin/Categoria/add-categorias');
 });
 
 router.post('/categorias/nova', (req, res) => {
     var erros = []
-    
+
     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
         erros.push({texto: 'Nome inválido'});
     } else if(req.body.nome.length < 2){
@@ -39,7 +132,7 @@ router.post('/categorias/nova', (req, res) => {
     }
 
     if(erros.length > 0){
-        res.render('../views/layouts/admin/add-categorias', {erros: erros});
+        res.render('../views/layouts/admin/Categoria/add-categorias', {erros: erros});
     } else {
         const novaCategoria = {
             nome: req.body.nome,
@@ -58,7 +151,7 @@ router.post('/categorias/nova', (req, res) => {
 
 router.get('/categorias/edit/:id', (req, res) => {
     Categoria.findOne({_id:req.params.id}).lean().then((categoria) => {
-        res.render('../views/layouts/admin/edit-categorias', {categoria: categoria});
+        res.render('../views/layouts/admin/Categoria/edit-categorias', {categoria: categoria});
     }).catch(() => {
         req.flash('error_msg', 'Erro! Não foi possível editar a categoria porque ela não existe');
         res.redirect('/admin/categorias');
@@ -92,4 +185,5 @@ router.post('/categorias/deletar/', (req, res) => {
         res.redirect('/admin/categorias');
     });
 });
+
 module.exports = router;
