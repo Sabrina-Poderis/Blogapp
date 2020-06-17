@@ -1,0 +1,41 @@
+<h3>Editar Postagem: </h3>
+<form action="/admin/postagens/edit" method="POST">
+    <input type="hidden" value="{{postagem._id}}" name="id"/>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="titulo">Título:</label>
+            <input type="text" class="form-control" name="titulo" value="{{postagem.titulo}}"/>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="descricao">Descrição:</label>
+            <input type="text" class="form-control" name="descricao" value="{{postagem.descricao}}"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="slug">Slug:</label>
+            <input type="text" class="form-control" name="slug"  value="{{postagem.slug}}"/>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="categoria">Categoria:</label>
+            <select name="categoria" class="custom-select">
+                <option value=""></option>
+                {{#each categorias}}
+                    <option value="{{_id}}">{{nome}}</option>
+                {{else}}
+                    <option value="">Nenhuma categoria registrada</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="conteudo">Conteúdo:</label>
+            <textarea type="text" class="form-control" name="conteudo">{{postagem.conteudo}}</textarea>
+        </div>
+    </div>
+    <div class="form-row">
+        <button class="btn btn-primary" type="submit">Editar Postagem</button>
+    </div>
+</form>
