@@ -1,0 +1,18 @@
+<h2>Lista de Categorias</h2>
+<hr/>
+
+{{#if categorias}}
+    {{#each categorias}}
+        <div class="row-sm-6">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <a href="/categorias/{{slug}}">
+                        <h5 class="card-title">
+                            {{nome}}
+                        </h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{/if}}
