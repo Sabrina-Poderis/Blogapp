@@ -1,4 +1,6 @@
 // Carregando módulos
+    require('./models/Categoria');
+    require('./models/Postagem');
     const express    = require('express');
     const handlebars = require('express-handlebars')
     const bodyParser = require('body-parser');
@@ -8,6 +10,8 @@
     const admin      = require('./routes/admin');
     const session    = require('express-session');
     const flash      = require('connect-flash');
+    const Categoria  = mongoose.model('categorias');
+    const Postagem   = mongoose.model('postagens');
 
 // Configurações
     // Sessão
@@ -43,7 +47,32 @@
         app.use(express.static('public'));
     // Rotas
         app.get('/', (req, res) => {
-            res.send('Rota principal');
+            Postagem.find().populate('categoria').sort({data:'desc'}).then((postagens) => {
+                res.render('../views/index', {postagens: postagens.map(postagens => postagens.toJSON())})
+            }).catch((erro) => {
+                req.flash('error_msg', 'Ocorreu um erro!' + erro);
+                res.redirect('/');
+            });
+        });
+
+        app.get('/postagem/:slug', (req,res) => {
+            const slug = req.params.slug
+            Postagem.findOne({slug}).then(postagem => {
+                if(postagem){
+                    const post = {
+                        titulo: postagem.titulo,
+                        data: postagem.data,
+                        conteudo: postagem.conteudo
+                    }
+                    res.render('../views/layouts/postagem/index', post)
+                }else{
+                    req.flash("error_msg", "Essa postagem nao existe")
+                    res.redirect("/")
+                }
+            }).catch(err => {
+                req.flash("error_msg", "Houve um erro interno")
+                res.redirect("/")
+            })
         });
         app.use('/admin', admin);
     // Outros
