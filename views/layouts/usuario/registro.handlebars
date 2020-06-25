@@ -1,0 +1,27 @@
+<h3>Cria sua Conta!</h3>
+<form action="/usuario/registro" method="POST">
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="nome">Nome:</label>
+            <input type="text" class="form-control" name="nome"/>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" name="email"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="senha">Senha:</label>
+            <input type="password" class="form-control" name="senha"/>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="confirmacaoSenha">Confirme sua senha:</label>
+            <input type="password" class="form-control" name="confirmacaoSenha"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <button class="btn btn-primary" type="submit">Criar Usuário</button>
+    </div>
+</form>
