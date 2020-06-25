@@ -1,12 +1,10 @@
 <div class="jumbotron">
-  <h1 class="display-4">Bem vindo ao blog!</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+  <h1 class="display-4 ">Bem-vindo ao Blog do Node</h1>
+  <p class="lead">Este é um Blog simples, desenvolvido com Node.js + Espress + MongoDB sob as orientações de Victor Lima, em seu Curso de NodeJs</p>
   <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <a class="btn btn-primary btn-lg" href="#" role="button">Crie uma conta!</a>
+  <p>Aqui você vai poder ler sobre as novidades do mundo da computação!</p>
+  <a class="btn btn-success btn-lg" href="/usuario/registro" role="button">Crie uma conta!</a>
 </div>
-
-<h2>Página de posts</h2>
 
 {{#each postagens}}
 <div class="card mt-4">
@@ -15,7 +13,7 @@
     </div>
     <div class="card-body">
         <div class="card-text">
-            <p>Descrição: {{descricao}}</p>
+            <p>{{descricao}}</p>
             <a href="/postagem/{{slug}}">
                 <button class="btn btn-success">
                     Leia mais
@@ -24,12 +22,10 @@
             <br><br>
             <small>Data: {{data}}</small><br>
             <small>Categoria: {{categoria.nome}}</small>
-            
         </div>
-        
     </div>
 </div>
 {{else}}
     <hr class="mt-5"/>
-    <h2 class="text-center">Não existem postagens, crie uma!</h2>
+    <h2 class="text-center">Não existem postagens no momento!</h2>
 {{/each}}

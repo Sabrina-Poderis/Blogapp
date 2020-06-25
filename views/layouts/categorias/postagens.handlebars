@@ -7,7 +7,7 @@
     </div>
     <div class="card-body">
         <div class="card-text">
-            <p>Descrição: {{descricao}}</p>
+            <p>{{descricao}}</p>
             <a href="/postagem/{{slug}}">
                 <button class="btn btn-success">
                     Leia mais
@@ -20,6 +20,5 @@
     </div>
 </div>
 {{else}}
-    <hr class="mt-5"/>
     <h2 class="text-center">Não existem postagens nessa categoria!</h2>
 {{/each}}
