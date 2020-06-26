@@ -1,0 +1,20 @@
+{
+  "name": "blogapp",
+  "version": "1.0.0",
+  "description": "> Blog desenvolvido em Node, sob as orientações de [Victor Lima](https://www.youtube.com/channel/UC_issB-37g9lwfAA37fy2Tg/playlists) em seu [Curso de Node.js](https://www.youtube.com/playlist?list=PLJ_KhUnlXUPtbtLwaxxUxHqvcNQndmI4B)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sabrina-Poderis/Blogapp.git"
+  },
+  "author": "Sabrina Poderis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sabrina-Poderis/Blogapp/issues"
+  },
+  "homepage": "https://github.com/Sabrina-Poderis/Blogapp#readme"
+}

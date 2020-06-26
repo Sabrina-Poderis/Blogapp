@@ -7,6 +7,7 @@
     const handlebars = require('express-handlebars')
     const bodyParser = require('body-parser');
     const mongoose   = require('mongoose');
+    const db         = require('./config/db');
     const app        = express();
     const path       = require('path');
     const admin      = require('./routes/admin');
@@ -46,7 +47,7 @@
         app.set('view engine', 'handlebars');
     // Mongoose
         mongoose.Promise = global.Promise;
-        mongoose.connect('mongodb://localhost/blogapp', {
+        mongoose.connect(db.mongoURI, {
             useNewUrlParser: true , 
             useUnifiedTopology: true
         }).then(()=>{
@@ -71,7 +72,7 @@
         app.use('/admin', admin);
         app.use('/usuario', usuario);
     // Outros
-        const PORT = 8081;
+        const PORT = process.env.PORT || 8081;
 
 app.listen(PORT, () => {
     console.log('Servidor ligado! http://localhost:'+PORT+'/');
