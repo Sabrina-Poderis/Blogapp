@@ -46,6 +46,7 @@
         app.engine('handlebars', handlebars({defaultLayout: 'main'}));
         app.set('view engine', 'handlebars');
     // Mongoose
+        console.log('link de conexão: ' + db.mongoURI);
         mongoose.Promise = global.Promise;
         mongoose.connect(db.mongoURI, {
             useNewUrlParser: true , 
