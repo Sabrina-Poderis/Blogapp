@@ -1,0 +1,48 @@
+<h2 class="text-center">Lista de Usuarios</h2>
+<hr/>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Nome</th>
+      <th scope="col">Email</th>
+      <th scope="col">Tipo de Usuario</th>
+      <th scope="col">Excluir</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each usuarios}}
+      <tr>
+        <td>{{nome}}</td>
+        <td>{{email}}</td>
+
+        <form action="/admin/usuarios/edit" method="POST">
+          <input type="hidden" name="id" value="{{_id}}"/>
+          {{#if eAdmin}}
+            <input type="hidden" name="eAdmin" value="false"/>
+            <td>
+              <button type="submit" class="btn">Administrador</button>
+            </td>
+          {{else}}
+            <input type="hidden" name="eAdmin" value="true"/>
+            <td>
+              <button type="submit" class="btn">Comum</button>
+            </td>
+          {{/if}}
+        </form>
+        
+        <form action="/admin/usuarios/deletar" method="POST">
+          <input type="hidden" name="id" value="{{_id}}"/>
+          <td>
+            <button type="submit" class="btn btn-danger btn-lg">X</button>
+          </td>
+        </form>
+      </tr>       
+    {{/each}}
+  </tbody>
+</table>
+
+{{#unless usuarios}}
+    <hr class="mt-5"/>
+    <h2 class="text-center">Não existem usuários para gerenciar</h2>
+{{/unless}}

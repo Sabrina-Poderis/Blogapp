@@ -5,6 +5,7 @@ const router    = require('express').Router();
 const mongoose  = require('mongoose');
 const Categoria = mongoose.model('categorias');
 const Postagem  = mongoose.model('postagens');
+const Usuario   = mongoose.model('usuarios');
 const {eAdmin}  = require('../helpers/eAdmin');
 
 router.get('/', eAdmin, (req, res) => {
@@ -186,5 +187,44 @@ router.post('/categorias/deletar/', eAdmin, (req, res) => {
         res.redirect('/admin/categorias');
     });
 });
+
+
+//-------------/
+
+router.get('/usuarios', eAdmin, (req, res) => {
+    Usuario.find().sort({nome:'desc'}).then((usuarios) => {
+        res.render('../views/layouts/admin/Usuario/index', {usuarios: usuarios.map(usuarios => usuarios.toJSON())})
+    }).catch((erro) => {
+        req.flash('error_msg', 'Ocorreu um erro!' + erro);
+        res.redirect('/admin');
+    });
+});
+
+router.post('/usuarios/edit/', eAdmin, (req, res) => {
+    Usuario.findOne({_id:req.body.id}).then((usuario) => {
+        usuario.eAdmin = req.body.eAdmin;
+        usuario.save().then(() => {
+           req.flash('success_msg', 'Usuário editado com sucesso!');
+           res.redirect('/admin/usuarios');
+        }).catch((erro) => {
+            req.flash('error_msg', 'Erro ao editar usuario! ' + erro);
+            res.redirect('/admin/usuarios');
+        });
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao editar usuario! ' + erro);
+        res.redirect('/admin/usuarios');
+    });
+});
+
+router.post('/usuarios/deletar/', eAdmin, (req, res) => {
+    Usuario.deleteOne({_id: req.body.id}).then(() => {
+        req.flash('success_msg', 'Usuario excluido com sucesso!');
+        res.redirect('/admin/usuarios');
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao deletar usuario! ' + erro);
+        res.redirect('/admin/usuarios');
+    });
+});
+
 
 module.exports = router;

@@ -11,6 +11,19 @@
         <a class="nav-link" href="/categoria">Categorias</a>
       </li>
       {{#if user}}
+        {{#if user.eAdmin}}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Área Administrativa
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/admin/">Home</a>
+              <a class="dropdown-item" href="/admin/categorias">Categorias</a>
+              <a class="dropdown-item" href="/admin/postagens">Postagens</a>
+              <a class="dropdown-item" href="/admin/usuarios">Usuários</a>
+            </div>
+          </li>
+        {{/if}}
         <li class="nav-item">
           <a class="nav-link" href="/usuario/logout">Sair</a>
         </li> 

@@ -14,8 +14,8 @@ const Usuario = new Schema({
         type: String,
         required: true
     },
-    tipoUsuario:{
-        type: String,
+    eAdmin:{
+        type: Boolean,
         required: true
     }
 });

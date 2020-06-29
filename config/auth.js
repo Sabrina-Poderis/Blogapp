@@ -22,11 +22,11 @@ module.exports = function (passport) {
 
     passport.serializeUser((usuario, done) => {
         done(null, usuario.id);
-    })
+    });
 
     passport.deserializeUser((id, done) => {
         Usuario.findById(id, (err, usuario) => {
-            done(err, usuario)
-        })
-    })
+            done(err, usuario);
+        }).lean();
+    });
 }

@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV == "production") {
     module.exports = {
-        mongoURI: "mongodb+srv://varphy:PmtSIi64cSdEcycY@blogapp-prod-i4pfd.mongodb.net/blogapp-prod?retryWrites=true&w=majority"
+        mongoURI: "mongodb+srv:[...]"
     }
 } else {
     module.exports = { mongoURI: "mongodb://localhost/blogapp" }
