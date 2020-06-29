@@ -1,32 +1,58 @@
-<div class="jumbotron">
-  <h1 class="display-4 ">Bem-vindo ao Blog do Node</h1>
-  <p class="lead">Este é um Blog simples, desenvolvido com Node.js + Espress + MongoDB sob as orientações de Victor Lima, em seu Curso de NodeJs</p>
-  <hr class="my-4">
-  <p>Aqui você vai poder ler sobre as novidades do mundo da computação!</p>
-  <a class="btn btn-success btn-lg" href="/usuario/registro" role="button">Crie uma conta!</a>
-</div>
-
-
-{{#each postagens}}
-<div class="card mt-4">
-    <div class="card-header">
-        <h3 class="card-title">{{titulo}}</h3>
-    </div>
-    <div class="card-body">
-        <div class="card-text">
-            <p>{{descricao}}</p>
-            <a href="/postagem/{{slug}}">
-                <button class="btn btn-success">
-                    Leia mais
-                </button>
-            </a>
-            <br><br>
-            <small>Data: {{data}}</small><br>
-            <small>Categoria: {{categoria.nome}}</small>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9">
+        <div class="jumbotron">
+            <h1 class="display-4 ">Blog do Node</h1>
+            <p class="lead">Este é um Blog simples, desenvolvido com Node.js + Espress + MongoDB sob as orientações de Victor Lima, em seu Curso de NodeJs</p>
+            <hr class="my-4">
+            <p>Aqui você vai poder ler sobre as novidades do mundo da computação!</p>
         </div>
+
+        {{#each postagens}}
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3 class="card-title">{{titulo}}</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+                        <p>{{descricao}}</p>
+                        <a href="/postagem/{{slug}}">
+                            <button class="btn btn-success">
+                                Leia mais
+                            </button>
+                        </a>
+                        <br><br>
+                        <small>Data: {{data}}</small><br>
+                        <small>Categoria: {{categoria.nome}}</small>
+                    </div>
+                </div>
+            </div>
+        {{else}}
+            <hr class="mt-5"/>
+            <h2 class="text-center">Não existem postagens no momento!</h2>
+        {{/each}}
+    </div>
+    <div class="col-sm-2">
+        <div class="card" style="width: 18rem;">
+            {{#if user}}
+                <img class="card-img-top" src="https://img.icons8.com/color/48/000000/avatar.png" alt="Imagem de capa do card">
+                <div class="card-body">
+                    <h5 class="card-title">Bem vinda {{user.nome}}</h5>
+                    <p class="card-text">Um exemplo de texto rápido para construir o título do card e fazer preencher o conteúdo do card.</p>
+                    <a href="#" class="btn btn-success">Perfil</a>
+                    <a href="#" class="btn btn-success">Postagens</a>
+                    <a href="/usuario/logout">sair</a>
+                </div>
+            {{else}}
+                <div class="card-body text-center">
+                    <a href="/usuario/registro" class="btn btn-success">Crie uma Conta</a>
+                    <a href="/usuario/login" class="btn btn-success">Faça Login</a>
+                </div>
+            {{/if}}
+        </a>
+    </div>
     </div>
 </div>
-{{else}}
-    <hr class="mt-5"/>
-    <h2 class="text-center">Não existem postagens no momento!</h2>
-{{/each}}
+
+
+
