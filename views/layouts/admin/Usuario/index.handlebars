@@ -5,6 +5,7 @@
   <thead class="thead-dark">
     <tr>
       <th scope="col">Nome</th>
+      <th scope="col">Usuario</th>
       <th scope="col">Email</th>
       <th scope="col">Tipo de Usuario</th>
       <th scope="col">Excluir</th>
@@ -13,10 +14,11 @@
   <tbody>
     {{#each usuarios}}
       <tr>
-        <td>{{nome}}</td>
+        <td>{{nome}} {{sobrenome}}</td>
+        <td>{{nome_usuario}}</td>
         <td>{{email}}</td>
 
-        <form action="/admin/usuarios/edit" method="POST">
+        <form action="/admin/usuarios/edit_admin" method="POST">
           <input type="hidden" name="id" value="{{_id}}"/>
           {{#if eAdmin}}
             <input type="hidden" name="eAdmin" value="false"/>

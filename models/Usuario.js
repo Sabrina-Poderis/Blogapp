@@ -6,6 +6,12 @@ const Usuario = new Schema({
         type: String,
         required: true
     },
+    sobrenome:{
+        type: String
+    },
+    nome_usuario:{
+        type: String
+    },
     email:{
         type: String,
         required: true

@@ -1,13 +1,40 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-9">
+<div class="row">
+    <div class="col-sm-8">
         <div class="jumbotron">
             <h1 class="display-4 ">Blog do Node</h1>
             <p class="lead">Este é um Blog simples, desenvolvido com Node.js + Espress + MongoDB sob as orientações de Victor Lima, em seu Curso de NodeJs</p>
             <hr class="my-4">
             <p>Aqui você vai poder ler sobre as novidades do mundo da computação!</p>
         </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            {{#if user}}
+            <div class="card-header">
+                <h5 class="card-title">Bem vindo {{user.nome}}</h5>
+            </div>
+                <div class="card-body">
+                    <p class="card-text">Um exemplo de texto rápido para construir o título do card e fazer preencher o conteúdo do card.</p>
+                    <a href="/usuario/" class="btn btn-success">Perfil</a>
+                    <a href="#" class="btn btn-success">Postagens</a>
+                    <a href="/usuario/logout" class="btn btn-success">Sair</a>
+                </div>
+            {{else}}
+                <div class="text-center">
+                    <div class="card-header">
+                        <h5>É novo aqui? <a href="/usuario/registro">Registre-se!</a></h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Já tem uma conta? <a href="/usuario/login">Faça login</a></h5>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-sm-8">
         {{#each postagens}}
             <div class="card mt-4">
                 <div class="card-header">
@@ -32,27 +59,7 @@
             <h2 class="text-center">Não existem postagens no momento!</h2>
         {{/each}}
     </div>
-    <div class="col-sm-2">
-        <div class="card" style="width: 18rem;">
-            {{#if user}}
-                <img class="card-img-top" src="https://img.icons8.com/color/48/000000/avatar.png" alt="Imagem de capa do card">
-                <div class="card-body">
-                    <h5 class="card-title">Bem vinda {{user.nome}}</h5>
-                    <p class="card-text">Um exemplo de texto rápido para construir o título do card e fazer preencher o conteúdo do card.</p>
-                    <a href="#" class="btn btn-success">Perfil</a>
-                    <a href="#" class="btn btn-success">Postagens</a>
-                    <a href="/usuario/logout">sair</a>
-                </div>
-            {{else}}
-                <div class="card-body text-center">
-                    <a href="/usuario/registro" class="btn btn-success">Crie uma Conta</a>
-                    <a href="/usuario/login" class="btn btn-success">Faça Login</a>
-                </div>
-            {{/if}}
-        </a>
-    </div>
+    <div class="col-sm-4">
+        aaa
     </div>
 </div>
-
-
-
