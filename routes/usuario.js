@@ -1,10 +1,14 @@
 require("../models/Usuario");
+require('../models/Categoria');
+require('../models/Postagem');
 const express             = require("express");
 const router              = express.Router();
 const mongoose            = require("mongoose");
 const bcrypt              = require("bcryptjs");
 const passport            = require("passport");
 const Usuario             = mongoose.model("usuarios");
+const Categoria           = mongoose.model('categorias');
+const Postagem            = mongoose.model('postagens');
 const {userAuthenticated} = require('../helpers/userAuthenticated');
 
 router.get('/', userAuthenticated, (req, res) => {
@@ -157,6 +161,114 @@ router.post('/edit-senha', userAuthenticated, (req, res) => {
     }).catch((erro) => {
         req.flash('error_msg', 'Erro ao editar Senha! ' + erro);
         res.redirect('/usuario');
+    });
+});
+
+router.get('/postagens', userAuthenticated, (req, res) => {
+    Postagem.find({usuario: res.locals.user}).populate('categoria').populate('usuario').sort({data:'desc'}).then((postagens) => {
+        res.render('../views/layouts/usuario/postagem/postagens', {postagens: postagens.map(postagens => postagens.toJSON())})
+    }).catch((erro) => {
+        req.flash('error_msg', 'Ocorreu um erro!' + erro);
+        res.redirect('/');
+    });
+});
+
+router.get('/postagens/add', userAuthenticated, (req, res) => {
+    Categoria.find().then((categorias) => {
+        res.render('../views/layouts/usuario/postagem/add-postagens', {categorias: categorias.map(categorias => categorias.toJSON())})
+    }).catch((erro) => {
+        req.flash('error_msg', 'Ocorreu um erro!' + erro);
+        res.redirect('/');
+    });
+});
+
+router.post('/postagens/nova', userAuthenticated, (req, res) => {
+    var erros = []
+
+    if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null){
+        erros.push({texto: 'Título inválido'});
+    } else if(req.body.titulo.length < 2){
+        erros.push({texto: "Título é muito pequeno"});
+    }
+
+    if(erros.length > 0){
+        res.render('../views/layouts/usuario/postagem/add-postagens', {erros: erros});
+    } else {
+        Usuario.findOne({_id:req.body.user_id}).lean().then((usuario) => {
+           if(usuario.eAdmin == true){
+            statusPostagem = 'aprovado';
+           } else {
+            statusPostagem = 'em análise';
+           }
+
+           const novaPostagem = {
+               titulo   : req.body.titulo,
+               slug     : req.body.slug,
+               descricao: req.body.descricao,
+               conteudo : req.body.conteudo,
+               categoria: req.body.categoria,
+               usuario  : req.body.user_id,
+               status   : statusPostagem
+           };
+           
+           console.log(statusPostagem);
+           new Postagem(novaPostagem).save().then(() => {
+               req.flash('success_msg', 'Postagem salva com sucesso!');
+               res.redirect('/');
+           }).catch((erro) => {
+               req.flash('error_msg', 'Ocorreu um erro!' + erro);
+               res.redirect('/');
+           });
+        }).catch((erro) => {
+            req.flash('error_msg', 'Erro!' + erro);
+            res.redirect('/');
+        });
+
+    }
+});
+
+router.get('/postagens/edit/:id', userAuthenticated, (req, res) => {
+    Postagem.findOne({_id:req.params.id}).lean().then((postagem) => {
+        Categoria.find().lean().then((categorias) => {
+            res.render('../views/layouts/admin/Postagem/edit-postagens', {categorias: categorias, postagem: postagem});
+        }).catch(() => {
+            req.flash('error_msg', 'Erro! Não foi possível listar as categorias');
+            res.redirect('/admin/postagens');
+        });
+    }).catch(() => {
+        req.flash('error_msg', 'Erro! Não foi possível editar a postagem porque ela não existe');
+        res.redirect('/admin/postagens');
+    });
+});
+
+router.post('/postagens/edit/', userAuthenticated, (req, res) => {
+    Postagem.findOne({_id:req.body.id}).then((postagem) => {
+        postagem.titulo    = req.body.titulo;
+        postagem.slug      = req.body.slug;
+        postagem.descricao = req.body.descricao;
+        postagem.conteudo  = req.body.conteudo;
+        postagem.categoria = req.body.categoria;
+       
+        postagem.save().then(() => {
+           req.flash('success_msg', 'Postagem editada com sucesso!');
+           res.redirect('/admin/postagens');
+        }).catch((erro) => {
+            req.flash('error_msg', 'Erro ao editar postagem! ' + erro);
+            res.redirect('/admin/postagens');
+        });
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao editar postagem! ' + erro);
+        res.redirect('/admin/postagens');
+    });
+});
+
+router.post('/postagens/deletar/', userAuthenticated, (req, res) => {
+    Postagem.deleteOne({_id: req.body.id}).then(() => {
+        req.flash('success_msg', 'Postagem excluida com sucesso!');
+        res.redirect('/admin/postagens');
+    }).catch((erro) => {
+        req.flash('error_msg', 'Erro ao deletar postagem! ' + erro);
+        res.redirect('/admin/postagens');
     });
 });
 

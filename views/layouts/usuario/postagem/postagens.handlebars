@@ -1,6 +1,6 @@
 <h2>Lista de Postagens</h2>
 <hr/>
-<a href="/admin/postagens/add"><button type="button" class="btn btn-success">Nova Postagem</button></a>
+<a href="/usuario/postagens/add"><button type="button" class="btn btn-success">Nova Postagem</button></a>
 
 {{#each postagens}}
 <div class="card mt-4">
@@ -15,19 +15,17 @@
             <p>Usuario: {{usuario.nome_usuario}}</p>
             <p>Status: {{status}}</p>
             <div class="row mt-2">
-               <a href="/admin/postagens/edit/{{_id}}" class="mr-4 ml-3">
+               <a href="/usuario/postagens/edit/{{_id}}" class="mr-4 ml-3">
                     <button class="btn btn-warning">
                         Editar
                     </button>
                 </a>
-                <form action="/admin/postagens/deletar" method="POST">
+                <form action="/usuario/postagens/deletar" method="POST">
                     <input type="hidden" name="id" value="{{_id}}"/>
                     <button type="submit" class="btn btn-danger">Excluir</button>
                 </form>
             </div>
-            
         </div>
-        
     </div>
 </div>
 {{else}}

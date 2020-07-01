@@ -23,10 +23,19 @@ const Postagem = new Schema({
         ref: "categorias",
         required: true
     },
+    usuario:{
+        type: Schema.Types.ObjectId,
+        ref: "usuarios",
+        required: true
+    },
     data:{
         type: Date,
         default: Date.now()
     },
+    status:{
+        type: String,
+        required: true
+    }
 });
 
 mongoose.model("postagens", Postagem);

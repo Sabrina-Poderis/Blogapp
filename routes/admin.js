@@ -200,7 +200,7 @@ router.get('/usuarios', eAdmin, (req, res) => {
     });
 });
 
-router.post('/usuarios/edit_admin/', eAdmin, (req, res) => {
+router.post('/usuarios/edit/', eAdmin, (req, res) => {
     Usuario.findOne({_id:req.body.id}).then((usuario) => {
         usuario.eAdmin = req.body.eAdmin;
         usuario.save().then(() => {

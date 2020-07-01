@@ -59,7 +59,7 @@
         app.use(express.static('public'));
     // Rotas
         app.get('/', (req, res) => {
-            Postagem.find().populate('categoria').sort({data:'desc'}).then((postagens) => {
+            Postagem.find({status: 'aprovado'}).populate('categoria').sort({data:'desc'}).then((postagens) => {
                 res.render('../views/index', {postagens: postagens.map(postagens => postagens.toJSON())})
             }).catch((erro) => {
                 req.flash('error_msg', 'Ocorreu um erro!' + erro);

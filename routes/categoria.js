@@ -33,5 +33,3 @@ router.get('/:slug', (req, res) => {
         res.redirect('/');
     })
 });
-
-module.exports = router;
