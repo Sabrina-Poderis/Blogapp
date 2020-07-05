@@ -1,0 +1,14 @@
+{{#each errosFormulario}}
+    <div class="alert alert-danger">{{texto}}</div>
+{{/each}}
+
+<h2 class="text-center">Login </h2>
+<form action="/auth/login" method="post">
+    <label for="email">Email: </label>
+    <input type="email" class="form-control" name="email">
+    <br>
+    <label for="senha">Senha: </label>
+    <input type="password" class="form-control" name="senha">
+    <br>
+    <button class="btn btn-success" type="submit">Entrar</button>
+</form>

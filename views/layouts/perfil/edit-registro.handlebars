@@ -1,0 +1,36 @@
+{{#each errosFormulario}}
+    <div class="alert alert-danger">{{texto}}</div>
+{{/each}}
+
+<h3>Informações Gerais</h3>
+<hr>
+<form action="/perfil/edit" method="POST">
+    <input type="hidden" value="{{user._id}}" name="id"/>
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="nome">Nome:</label>
+            <input type="text" class="form-control" name="nome" value="{{user.nome}}"/>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="sobrenome">Sobrenome:</label>
+            <input type="text" class="form-control" name="sobrenome" value="{{user.sobrenome}}"/>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-6 mb-3">
+            <label for="nome_usuario">Usuário:</label>
+            <input type="text" class="form-control" name="nome_usuario" value="{{user.nome_usuario}}"/>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" name="email" value="{{user.email}}"/>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <button class="btn btn-success" type="submit">Alterar</button>
+    </div>
+</form>

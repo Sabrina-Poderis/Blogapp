@@ -1,0 +1,21 @@
+{{#each errosFormulario}}
+    <div class="alert alert-danger">{{texto}}</div>
+{{/each}}
+
+<h3 class="mt-5">Alterar Senha</h3>
+<hr>
+<form action="/perfil/edit-senha" method="post">
+    <input type="hidden" value="{{user._id}}" name="id"/>
+    <div class="form-row">
+        <div class="col-md-4 mb-3">
+            <label for="senha_nova">Nova senha:</label>
+            <input type="password" class="form-control" name="senha_nova" >
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="senha_confirmada">Confirme a nova senha:</label>
+            <input type="password" class="form-control" name="senha_confirmada" >
+        </div>
+    </div>
+    <button class="btn btn-success" type="submit">Alterar</button>
+</form>

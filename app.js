@@ -1,26 +1,31 @@
 // Carregando módulos
-    require('./models/Categoria');
-    require('./models/Postagem');
-    require('./models/Usuario');
-    
-    const express    = require('express');
-    const handlebars = require('express-handlebars')
-    const bodyParser = require('body-parser');
-    const mongoose   = require('mongoose');
-    const db         = require('./config/db');
-    const app        = express();
-    const path       = require('path');
-    const admin      = require('./routes/admin');
-    const categoria  = require('./routes/categoria')
-    const usuario    = require('./routes/usuario');
-    const postagem   = require('./routes/postagem');
-    const session    = require('express-session');
-    const flash      = require('connect-flash');
-    const Categoria  = mongoose.model('categorias');
-    const Postagem   = mongoose.model('postagens');
-    const Usuario    = mongoose.model('usuarios');
-    const passport   = require('passport');
-    require('./config/auth')(passport);
+    // Express
+        const express    = require('express');
+        const app        = express();
+    // Body Parser
+        const bodyParser = require('body-parser');
+    // Handlebars
+        const handlebars = require('express-handlebars')
+    // Mongoose
+        const mongoose   = require('mongoose');
+        const db         = require('./config/db');
+    // Rotas
+        const path       = require('path');
+        const admin      = require('./routes/admin');
+        const categoria  = require('./routes/categoria')
+        const perfil     = require('./routes/perfil');
+        const auth       = require('./routes/auth');
+        const postagem   = require('./routes/postagem');
+    // Sessão
+        const session    = require('express-session');
+        const passport   = require('passport');
+        require('./config/auth')(passport);
+        const flash      = require('connect-flash');
+    // Control Postagem
+        const ctlPostagem  = require('./control/postagem');
+    // Moment
+        const moment = require('moment');
+
 // Configurações
     // Sessão
         app.use(session({
@@ -43,7 +48,21 @@
         app.use(bodyParser.urlencoded({extended: false}));
         app.use(bodyParser.json());
     // Handlebars
-        app.engine('handlebars', handlebars({defaultLayout: 'main'}));
+        app.engine('handlebars', handlebars({
+            defaultLayout: 'main',
+            helpers: {
+                formatDate: (date) => {
+                    return moment(date).format('DD/MM/YYYY hh:mm')
+                },
+                if_eq: (a, b, opts) => {
+                    if (a.toString() == b.toString()) {
+                        return opts.fn(this)
+                    } else {
+                        return opts.inverse(this)
+                    }
+                }
+            }
+        }));
         app.set('view engine', 'handlebars');
     // Mongoose
         mongoose.Promise = global.Promise;
@@ -58,19 +77,12 @@
     //Public
         app.use(express.static('public'));
     // Rotas
-        app.get('/', (req, res) => {
-            Postagem.find({status: 'aprovado'}).populate('categoria').sort({data:'desc'}).then((postagens) => {
-                res.render('../views/index', {postagens: postagens.map(postagens => postagens.toJSON())})
-            }).catch((erro) => {
-                req.flash('error_msg', 'Ocorreu um erro!' + erro);
-                res.redirect('/');
-            });
-        });
-   
+        app.get('/', ctlPostagem.listaPostagensAprovadasIndex);
         app.use('/postagem', postagem);
         app.use('/categoria', categoria);
         app.use('/admin', admin);
-        app.use('/usuario', usuario);
+        app.use('/perfil', perfil);
+        app.use('/auth', auth);
     // Outros
         const PORT = process.env.PORT || 8081;
 

@@ -1,3 +1,7 @@
+{{#each errosFormulario}}
+    <div class="alert alert-danger">{{texto}}</div>
+{{/each}}
+
 <h3>Editar Caterogia: </h3>
 <form action="/admin/categorias/edit" method="POST">
     <input type="hidden" name="id" value="{{categoria._id}}"/>

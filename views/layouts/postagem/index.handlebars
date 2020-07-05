@@ -1,5 +1,23 @@
-<h1> {{titulo}} </h1>
-<hr>
-<small>Data de publicação: {{data}}</small>
-<hr>
-<p> {{conteudo}} </p>
+{{#each postagens}}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3 class="card-title">{{titulo}}</h3>
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                <p>{{descricao}}</p>
+                <a href="/postagem/{{slug}}">
+                    <button class="btn btn-success">
+                        Leia mais
+                    </button>
+                </a>
+                <br><br>
+                <small>Data: {{#formatDate data}}{{/formatDate}}</small><br>
+                <small>Categoria: {{categoria.nome}}</small>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <hr class="mt-5"/>
+    <h2 class="text-center">Não existem postagens no momento!</h2>
+{{/each}}

@@ -17,28 +17,32 @@
         <td>{{nome}} {{sobrenome}}</td>
         <td>{{nome_usuario}}</td>
         <td>{{email}}</td>
-
-        <form action="/admin/usuarios/edit_admin" method="POST">
-          <input type="hidden" name="id" value="{{_id}}"/>
-          {{#if eAdmin}}
-            <input type="hidden" name="eAdmin" value="false"/>
+        {{#if this.eDono}}
+            <td>Proprietario</td>
+            <td></td>
+        {{else}}
+          <form action="/admin/usuarios/edit_admin" method="POST">
+            <input type="hidden" name="id" value="{{_id}}"/>
+            {{#if eAdmin}}
+              <input type="hidden" name="eAdmin" value="false"/>
+              <td>
+                <button type="submit" class="btn">Administrador</button>
+              </td>
+            {{else}}
+              <input type="hidden" name="eAdmin" value="true"/>
+              <td>
+                <button type="submit" class="btn">Comum</button>
+              </td>
+            {{/if}}
+          </form>
+          
+          <form action="/admin/usuarios/deletar" method="POST">
+            <input type="hidden" name="id" value="{{_id}}"/>
             <td>
-              <button type="submit" class="btn">Administrador</button>
+              <button type="submit" class="btn btn-danger btn-lg">X</button>
             </td>
-          {{else}}
-            <input type="hidden" name="eAdmin" value="true"/>
-            <td>
-              <button type="submit" class="btn">Comum</button>
-            </td>
-          {{/if}}
-        </form>
-        
-        <form action="/admin/usuarios/deletar" method="POST">
-          <input type="hidden" name="id" value="{{_id}}"/>
-          <td>
-            <button type="submit" class="btn btn-danger btn-lg">X</button>
-          </td>
-        </form>
+          </form>
+        {{/if}}
       </tr>       
     {{/each}}
   </tbody>

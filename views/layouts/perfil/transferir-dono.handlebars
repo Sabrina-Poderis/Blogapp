@@ -1,0 +1,20 @@
+<h3 class="text-center mb-5">Escolha um admin para transferir</h3>
+
+<div class="row">
+    {{#each usuarios}}
+        {{#if this.eAdmin}}
+            {{#unless this.eDono}}
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">                        
+                            <a href="/perfil/transferir-dono/{{this._id}}">{{this.nome}}</a>
+                        </div>
+                    </div>
+                </div>
+            {{/unless}}
+
+        {{else}}
+            <h3>Não tem administradores</h3>
+        {{/if}}
+    {{/each}}
+</div>

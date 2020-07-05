@@ -17,6 +17,7 @@ npm install --save connect-flash
 npm install --save bcryptjs
 npm install --save passport
 npm install --save passport-local
+npm install --save moment
 ```
 
 Utilize o comando 'nodemon app.js' para executar o projeto.

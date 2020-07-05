@@ -23,6 +23,9 @@ const Usuario = new Schema({
     eAdmin:{
         type: Boolean,
         required: true
+    },
+    eDono:{
+        type: Boolean,
     }
 });
 

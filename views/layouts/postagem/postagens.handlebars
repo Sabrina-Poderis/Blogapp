@@ -1,0 +1,35 @@
+<h2>Lista de Postagens</h2>
+<hr/>
+<a href="/perfil/minhas-postagens/add"><button type="button" class="btn btn-success">Nova Postagem</button></a>
+
+{{#each postagens}}
+<div class="card mt-4">
+    <div class="card-header">
+        <h3 class="card-title">{{titulo}}</h3>
+    </div>
+    <div class="card-body">
+        <div class="card-text">
+            <p>Descrição: {{descricao}}</p>
+            <p>Data: {{data}}</p>
+            <p>Slug: {{slug}}</p>
+            <p>Categoria: {{categoria.nome}}</p>
+            <p>Usuario: {{usuario.nome_usuario}}</p>
+            <p>Status: {{status}}</p>
+            <div class="row mt-2">
+               <a href="/perfil/minhas-postagens/edit/{{_id}}" class="mr-4 ml-3">
+                    <button class="btn btn-warning">
+                        Editar
+                    </button>
+                </a>
+                <form action="/perfil/minhas-postagens/deletar" method="POST">
+                    <input type="hidden" name="id" value="{{_id}}"/>
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{else}}
+    <hr class="mt-5"/>
+    <h2 class="text-center">Não existem postagens, crie uma!</h2>
+{{/each}}
