@@ -37,7 +37,8 @@ router.get('/', adminAuthenticated, (req, res) => {
 
     router.post('/usuarios/edit_admin/', adminAuthenticated, ctlUsuario.editaStatusUsuario);
 
+    router.post('/usuarios/bloqueia-usuario/', adminAuthenticated, ctlUsuario.bloqueiaUsuario); 
+
     router.post('/usuarios/deletar/', adminAuthenticated, ctlUsuario.deletaUsuarioAdmin); 
-    //notifica usuario se fizer login??
 
 module.exports = router;

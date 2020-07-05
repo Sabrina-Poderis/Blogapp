@@ -21,7 +21,7 @@
         const passport   = require('passport');
         require('./config/auth')(passport);
         const flash      = require('connect-flash');
-    // Control Postagem
+    // Control Postagem    
         const ctlPostagem  = require('./control/postagem');
     // Moment
         const moment = require('moment');

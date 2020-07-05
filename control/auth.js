@@ -130,11 +130,24 @@ exports.login = function (req, res, next) {
     if(errosFormulario.length > 0){
         res.render('../views/layouts/auth/login', {errosFormulario: errosFormulario});
     } else {
-        passport.authenticate("local", {
-            successRedirect: "/",
-            failureRedirect: "/auth/login",
-            failureFlash: true
-        })(req, res, next);
+        passport.authenticate("local",
+            function(err, user, info) {
+                if(user.eBloq){
+                    req.flash('error_msg', 'Você está bloqueado');
+                    res.redirect('/');
+                } else {
+                    req.login(user, function(err) {
+                        if (err) { return next(err); }
+                        return res.redirect('/');
+                    });
+                }
+            },
+            {
+                successRedirect: "/",
+                failureRedirect: "/auth/login",
+                failureFlash: true
+            }
+        )(req, res, next);
     }
 }
 

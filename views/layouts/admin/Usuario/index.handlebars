@@ -8,6 +8,7 @@
       <th scope="col">Usuario</th>
       <th scope="col">Email</th>
       <th scope="col">Tipo de Usuario</th>
+      <th scope="col">Bloquear</th>
       <th scope="col">Excluir</th>
     </tr>
   </thead>
@@ -36,6 +37,21 @@
             {{/if}}
           </form>
           
+          <form action="/admin/usuarios/bloqueia-usuario" method="POST">
+            <input type="hidden" name="id" value="{{_id}}"/>
+            {{#if eBloq}}
+              <input type="hidden" name="eBloq" value="false"/>
+              <td>
+                <button type="submit" class="btn">Bloqueado</button>
+              </td>
+            {{else}}
+              <input type="hidden" name="eBloq" value="true"/>
+              <td>
+                <button type="submit" class="btn">Ok</button>
+              </td>
+            {{/if}}
+          </form>
+
           <form action="/admin/usuarios/deletar" method="POST">
             <input type="hidden" name="id" value="{{_id}}"/>
             <td>

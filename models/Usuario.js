@@ -7,10 +7,12 @@ const Usuario = new Schema({
         required: true
     },
     sobrenome:{
-        type: String
+        type: String,
+        required: true
     },
     nome_usuario:{
-        type: String
+        type: String,
+        required: true
     },
     email:{
         type: String,
@@ -26,6 +28,10 @@ const Usuario = new Schema({
     },
     eDono:{
         type: Boolean,
+        required: true
+    },
+    eBloq:{
+        type: Boolean
     }
 });
 
