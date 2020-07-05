@@ -112,10 +112,10 @@ exports.editSenha = function(req, res){
 
 exports.deletaUsuario = function(req, res){
     Usuario.findOne({_id:req.body.id}).then((usuario) => {
-        // if(usuario.eDono == true){
-        //     req.flash('error_msg', 'Não é excluir sua conta se você for o proprietario!');
-        //     res.redirect('/perfil');
-        // } else {
+        if(usuario.eDono == true){
+            req.flash('error_msg', 'Não é excluir sua conta se você for o proprietario!');
+            res.redirect('/perfil');
+        } else {
             Usuario.deleteOne({_id: req.body.id}).then(() => {
                 req.flash('success_msg', 'Usuario excluido com sucesso!');
                 res.redirect('/');
@@ -123,7 +123,7 @@ exports.deletaUsuario = function(req, res){
                 req.flash('error_msg', 'Erro ao deletar usuario! ' + erro);
                 res.redirect('/');
             });
-        // }
+        }
     }).catch((erro) => {
         req.flash('error_msg', 'Erro ao editar usuario! ' + erro);
         res.redirect('/perfil');

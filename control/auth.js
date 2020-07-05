@@ -66,41 +66,51 @@ exports.createAccount = function (req, res, next) {
                 varAdmin = true;
                 varDono = true;
             }
-            Usuario.findOne({email:  req.body.email}).lean().then((usuario) => {
-                if (usuario) {
+            Usuario.findOne({email:  req.body.email}).lean().then((encontraEmail) => {
+                if (encontraEmail) {
                     req.flash('error_msg', 'Esse email ja possui um cadastro no sistema!');
                     res.redirect('/auth/registro');
                 } else {
-                    const novoUsuario = new Usuario({
-                        nome        : req.body.nome,
-                        sobrenome   : req.body.sobrenome,
-                        nome_usuario: req.body.nome_usuario,
-                        email       : req.body.email,
-                        senha       : req.body.senha,
-                        eAdmin      : varAdmin,
-                        eDono       : varDono
-                    });
-        
-                    bcrypt.genSalt(10, (err, salt) => {
-                        bcrypt.hash(novoUsuario.senha, salt, (err, hash) => {
-                            if (err) {
-                                req.flash('error_msg', 'Houve um erro durante o salvamento do usuário');
-                                res.redirect('/');
-                            } else {
-                                novoUsuario.senha = hash;
-                                novoUsuario.save().then(() => {
-                                    req.flash('success_msg', 'Usuário cadastrado com sucesso!');
-                                    passport.authenticate("local", {
-                                        successRedirect: "/",
-                                        failureRedirect: "/auth/login",
-                                        failureFlash: true
-                                    })(req, res, next);
-                                }).catch((erro) => {
-                                    req.flash('error_msg', 'Houve um erro na criação do usuário' + erro);
-                                    res.redirect('/auth/registro');
+                    Usuario.findOne({nome_usuario:  req.body.nome_usuario}).lean().then((encontraNomeUsuario) => {
+                        if (encontraNomeUsuario) {
+                            req.flash('error_msg', 'Já existe um usuário com esse nome cadastrado no sistema!');
+                            res.redirect('/auth/registro');
+                        } else {
+                            const novoUsuario = new Usuario({
+                                nome        : req.body.nome,
+                                sobrenome   : req.body.sobrenome,
+                                nome_usuario: req.body.nome_usuario,
+                                email       : req.body.email,
+                                senha       : req.body.senha,
+                                eAdmin      : varAdmin,
+                                eDono       : varDono
+                            });
+                
+                            bcrypt.genSalt(10, (err, salt) => {
+                                bcrypt.hash(novoUsuario.senha, salt, (err, hash) => {
+                                    if (err) {
+                                        req.flash('error_msg', 'Houve um erro durante o salvamento do usuário');
+                                        res.redirect('/');
+                                    } else {
+                                        novoUsuario.senha = hash;
+                                        novoUsuario.save().then(() => {
+                                            req.flash('success_msg', 'Usuário cadastrado com sucesso!');
+                                            passport.authenticate("local", {
+                                                successRedirect: "/",
+                                                failureRedirect: "/auth/login",
+                                                failureFlash: true
+                                            })(req, res, next);
+                                        }).catch((erro) => {
+                                            req.flash('error_msg', 'Houve um erro na criação do usuário' + erro);
+                                            res.redirect('/auth/registro');
+                                        });
+                                    }
                                 });
-                            }
-                        });
+                            });
+                        }
+                    }).catch(() => {
+                        req.flash('error_msg', 'Erro interno');
+                        res.redirect('/');
                     });
                 }
             }).catch((erro) => {
@@ -108,11 +118,9 @@ exports.createAccount = function (req, res, next) {
                 res.redirect('/');
             })
         }).catch(() => {
-            req.flash('error_msg', 'Erro interno ao carregar esta categoria');
+            req.flash('error_msg', 'Erro interno');
             res.redirect('/');
-        })
-            
-       
+        });
     }
 }
 
