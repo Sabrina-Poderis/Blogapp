@@ -1,0 +1,20 @@
+<h2 class="text-center">Lista de Categorias</h2>
+
+{{#if categories}}
+    {{#each categories}}
+        <div class="row-sm-6">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <a href="/categoria/{{slug}}">
+                        <h5 class="card-title">
+                            {{name}}
+                        </h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+{{else}}
+    <hr/>
+    <h3>Não existem categorias!</h3>
+{{/if}}

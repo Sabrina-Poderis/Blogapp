@@ -1,108 +1,108 @@
-require("../models/Usuario");
+require("../models/User");
 const mongoose = require("mongoose");
 const bcrypt   = require("bcryptjs");
 const passport = require("passport");
-const Usuario  = mongoose.model("usuarios");
+const User     = mongoose.model("users");
 
-function validaCamposRegistro (dados){
-    let errosFormulario = [];
+function fieldsValidatorRegistry (fields){
+    let formErrors = [];
 
-    if(!dados.nome || typeof dados.nome == undefined || dados.nome == null || dados.nome.length < 2){
-        errosFormulario.push({texto: "Nome inválido"})
+    if(!fields.name || typeof fields.name == undefined || fields.name == null || fields.name.length < 2){
+        formErrors.push({error: "Nome inválido"})
     }
 
-    if(!dados.sobrenome || typeof dados.sobrenome == undefined || dados.sobrenome == null || dados.sobrenome.length < 2){
-        errosFormulario.push({texto: "Sobrenome inválido"})
+    if(!fields.surname || typeof fields.surname == undefined || fields.surname == null || fields.surname.length < 2){
+        formErrors.push({error: "Sobrenome inválido"})
     }
 
-    if(!dados.nome_usuario || typeof dados.nome_usuario == undefined || dados.nome_usuario == null || dados.nome_usuario.length < 2){
-        errosFormulario.push({texto: "Nome de usuário inválido"})
+    if(!fields.user_name || typeof fields.user_name == undefined || fields.user_name == null || fields.user_name.length < 2){
+        formErrors.push({error: "Nome de usuário inválido"})
     }
 
-    if(!dados.email || typeof dados.email == undefined || dados.email == null || dados.email.length < 2){
-        errosFormulario.push({texto: "E-mail inválido"})
+    if(!fields.email || typeof fields.email == undefined || fields.email == null || fields.email.length < 2){
+        formErrors.push({error: "E-mail inválido"})
     }
 
-    if(!dados.senha || typeof dados.senha == undefined || dados.senha == null){
-        errosFormulario.push({texto: "Senha inválida"})
-    } else if(dados.senha.length < 5){
-        errosFormulario.push({texto: "Sua senha deverá ter no mínimo 5 caracteres"})
+    if(!fields.password || typeof fields.password == undefined || fields.password == null){
+        formErrors.push({error: "Senha inválida"})
+    } else if(fields.password.length < 5){
+        formErrors.push({error: "Sua senha deverá ter no mínimo 5 caracteres"})
     } 
     
-    if(!dados.confirmacao_senha || typeof dados.confirmacao_senha == undefined || dados.confirmacao_senha == null){
-        errosFormulario.push({texto: "Confirme sua senha"})
-    } else if(dados.senha != dados.confirmacao_senha){
-        errosFormulario.push({texto: "As senhas estão diferentes"})
+    if(!fields.password_confirmation || typeof fields.password_confirmation == undefined || fields.password_confirmation == null){
+        formErrors.push({error: "Confirme sua senha"})
+    } else if(fields.password != fields.password_confirmation){
+        formErrors.push({error: "As senhas estão diferentes"})
     }
 
-    return errosFormulario;
+    return formErrors;
 }
 
-function validaCamposLogin (dados){
-    let errosFormulario = [];
+function fieldsValidatorLogin (fields){
+    let formErrors = [];
 
-    if(!dados.email || typeof dados.email == undefined || dados.email == null || dados.email.length < 2){
-        errosFormulario.push({texto: "E-mail inválido"})
+    if(!fields.email || typeof fields.email == undefined || fields.email == null || fields.email.length < 2){
+        formErrors.push({error: "E-mail inválido"})
     }
 
-    if(!dados.senha || typeof dados.senha == undefined || dados.senha == null || dados.senha.length < 3){
-        errosFormulario.push({texto: "Senha inválida"})
+    if(!fields.password || typeof fields.password == undefined || fields.password == null || fields.password.length < 3){
+        formErrors.push({error: "Senha inválida"})
     } 
 
-    return errosFormulario;
+    return formErrors;
 }
 
 exports.createAccount = function (req, res, next) {
-    let errosFormulario = validaCamposRegistro(req.body);
+    let formErrors = fieldsValidatorRegistry(req.body);
 
-    if(errosFormulario.length > 0){
-        res.render('../views/layouts/auth/registro', {errosFormulario: errosFormulario});
+    if(formErrors.length > 0){
+        res.render('../views/layouts/auth/registry', {formErrors: formErrors});
     } else {
-        Usuario.findOne().lean().then((encontraUser) => {
-            if(encontraUser){
-                varAdmin = false;
-                varDono = false;
+        User.findOne().lean().then((findUser) => {
+            if(findUser){
+                defineAdmin = false;
+                defineOwner = false;
             } else {
-                varAdmin = true;
-                varDono = true;
+                defineAdmin = true;
+                defineOwner = true;
             }
-            Usuario.findOne({email:  req.body.email}).lean().then((encontraEmail) => {
-                if (encontraEmail) {
+            User.findOne({email: req.body.email}).lean().then((findEmail) => {
+                if (findEmail) {
                     req.flash('error_msg', 'Esse email ja possui um cadastro no sistema!');
-                    res.redirect('/auth/registro');
+                    res.redirect('/auth/registry');
                 } else {
-                    Usuario.findOne({nome_usuario:  req.body.nome_usuario}).lean().then((encontraNomeUsuario) => {
-                        if (encontraNomeUsuario) {
+                    User.findOne({user_name: req.body.user_name}).lean().then((findUserName) => {
+                        if (findUserName) {
                             req.flash('error_msg', 'Já existe um usuário com esse nome cadastrado no sistema!');
-                            res.redirect('/auth/registro');
+                            res.redirect('/auth/registry');
                         } else {
-                            const novoUsuario = new Usuario({
-                                nome        : req.body.nome,
-                                sobrenome   : req.body.sobrenome,
-                                nome_usuario: req.body.nome_usuario,
-                                email       : req.body.email,
-                                senha       : req.body.senha,
-                                eAdmin      : varAdmin,
-                                eDono       : varDono
+                            const newUser = new User({
+                                name     : req.body.name,
+                                surname  : req.body.surname,
+                                user_name: req.body.user_name,
+                                email    : req.body.email,
+                                password : req.body.password,
+                                eAdmin   : defineAdmin,
+                                eOwner   : defineOwner
                             });
                 
                             bcrypt.genSalt(10, (err, salt) => {
-                                bcrypt.hash(novoUsuario.senha, salt, (err, hash) => {
+                                bcrypt.hash(newUser.password, salt, (err, hash) => {
                                     if (err) {
                                         req.flash('error_msg', 'Houve um erro durante o salvamento do usuário');
                                         res.redirect('/');
                                     } else {
-                                        novoUsuario.senha = hash;
-                                        novoUsuario.save().then(() => {
+                                        newUser.password = hash;
+                                        newUser.save().then(() => {
                                             req.flash('success_msg', 'Usuário cadastrado com sucesso!');
                                             passport.authenticate("local", {
                                                 successRedirect: "/",
                                                 failureRedirect: "/auth/login",
                                                 failureFlash: true
                                             })(req, res, next);
-                                        }).catch((erro) => {
-                                            req.flash('error_msg', 'Houve um erro na criação do usuário' + erro);
-                                            res.redirect('/auth/registro');
+                                        }).catch((error) => {
+                                            req.flash('error_msg', 'Houve um erro na criação do usuário' + error);
+                                            res.redirect('/auth/registry');
                                         });
                                     }
                                 });
@@ -125,23 +125,12 @@ exports.createAccount = function (req, res, next) {
 }
 
 exports.login = function (req, res, next) {
-    let errosFormulario = validaCamposLogin(req.body);
+    let formErrors = fieldsValidatorLogin(req.body);
 
-    if(errosFormulario.length > 0){
-        res.render('../views/layouts/auth/login', {errosFormulario: errosFormulario});
+    if(formErrors.length > 0){
+        res.render('../views/layouts/auth/login', {formErrors: formErrors});
     } else {
         passport.authenticate("local",
-            function(err, user, info) {
-                if(user.eBloq){
-                    req.flash('error_msg', 'Você está bloqueado');
-                    res.redirect('/');
-                } else {
-                    req.login(user, function(err) {
-                        if (err) { return next(err); }
-                        return res.redirect('/');
-                    });
-                }
-            },
             {
                 successRedirect: "/",
                 failureRedirect: "/auth/login",

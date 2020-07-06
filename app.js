@@ -1,28 +1,28 @@
 // Carregando módulos
     // Express
-        const express    = require('express');
-        const app        = express();
+        const express     = require('express');
+        const app         = express();
     // Body Parser
-        const bodyParser = require('body-parser');
+        const bodyParser  = require('body-parser');
     // Handlebars
-        const handlebars = require('express-handlebars')
+        const handlebars  = require('express-handlebars')
     // Mongoose
-        const mongoose   = require('mongoose');
-        const db         = require('./config/db');
+        const mongoose    = require('mongoose');
+        const db          = require('./config/db');
     // Rotas
-        const path       = require('path');
-        const admin      = require('./routes/admin');
-        const categoria  = require('./routes/categoria')
-        const perfil     = require('./routes/perfil');
-        const auth       = require('./routes/auth');
-        const postagem   = require('./routes/postagem');
+        const path        = require('path');
+        const admin       = require('./routes/admin');
+        const category    = require('./routes/category')
+        const profile     = require('./routes/profile');
+        const auth        = require('./routes/auth');
+        const post        = require('./routes/post');
     // Sessão
-        const session    = require('express-session');
-        const passport   = require('passport');
+        const session     = require('express-session');
+        const passport    = require('passport');
         require('./config/auth')(passport);
-        const flash      = require('connect-flash');
+        const flash       = require('connect-flash');
     // Control Postagem    
-        const ctlPostagem  = require('./control/postagem');
+        const postControl = require('./control/post');
     // Moment
         const moment = require('moment');
 
@@ -53,13 +53,6 @@
             helpers: {
                 formatDate: (date) => {
                     return moment(date).format('DD/MM/YYYY hh:mm')
-                },
-                if_eq: (a, b, opts) => {
-                    if (a.toString() == b.toString()) {
-                        return opts.fn(this)
-                    } else {
-                        return opts.inverse(this)
-                    }
                 }
             }
         }));
@@ -77,11 +70,11 @@
     //Public
         app.use(express.static('public'));
     // Rotas
-        app.get('/', ctlPostagem.listaPostagensAprovadasIndex);
-        app.use('/postagem', postagem);
-        app.use('/categoria', categoria);
+        app.get('/', postControl.listApprovedPosts_HomePage);
+        app.use('/postagem', post);
+        app.use('/categoria', category);
         app.use('/admin', admin);
-        app.use('/perfil', perfil);
+        app.use('/perfil', profile);
         app.use('/auth', auth);
     // Outros
         const PORT = process.env.PORT || 8081;

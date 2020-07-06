@@ -11,7 +11,7 @@
         <div class="card">
             {{#if user}}
             <div class="card-header">
-                <h5 class="card-title">Bem vindo {{user.nome}}</h5>
+                <h5 class="card-title">Bem vindo {{user.name}}</h5>
             </div>
                 <div class="card-body">
                     <p class="card-text">Um exemplo de texto rápido para construir o título do card e fazer preencher o conteúdo do card.</p>
@@ -35,22 +35,22 @@
 
 <div class="row">
     <div class="col-sm-8">
-        {{#each postagens}}
+        {{#each posts}}
             <div class="card mt-4">
                 <div class="card-header">
-                    <h3 class="card-title">{{titulo}}</h3>
+                    <h3 class="card-title">{{title}}</h3>
                 </div>
                 <div class="card-body">
                     <div class="card-text">
-                        <p>{{descricao}}</p>
+                        <p>{{description}}</p>
                         <a href="/postagem/{{slug}}">
                             <button class="btn btn-success">
                                 Leia mais
                             </button>
                         </a>
                         <br><br>
-                        <small>Data: {{#formatDate data}}{{/formatDate}}</small><br>
-                        <small>Categoria: {{categoria.nome}}</small>
+                        <small>Data: {{#formatDate date}}{{/formatDate}}</small><br>
+                        <small>Categoria: {{category.name}}</small>
                     </div>
                 </div>
             </div>

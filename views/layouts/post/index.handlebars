@@ -1,0 +1,23 @@
+{{#each posts}}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3 class="card-title">{{title}}</h3>
+        </div>
+        <div class="card-body">
+            <div class="card-text">
+                <p>{{description}}</p>
+                <a href="/postagem/{{slug}}">
+                    <button class="btn btn-success">
+                        Leia mais
+                    </button>
+                </a>
+                <br><br>
+                <small>Data: {{#formatDate date}}{{/formatDate}}</small><br>
+                <small>Categoria: {{category.name}}</small>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <hr class="mt-5"/>
+    <h2 class="text-center">Não existem postagens no momento!</h2>
+{{/each}}

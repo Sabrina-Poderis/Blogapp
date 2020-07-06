@@ -1,0 +1,65 @@
+<h2 class="text-center">Lista de Usuarios</h2>
+<hr/>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Nome</th>
+      <th scope="col">Usuario</th>
+      <th scope="col">Email</th>
+      <th scope="col">Tipo de Usuario</th>
+      <th scope="col">Bloquear</th>
+      <th scope="col">Excluir</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+      <tr>
+        <td>{{name}} {{surname}}</td>
+        <td>{{user_name}}</td>
+        <td>{{email}}</td>
+        {{#if this.eOwner}}
+            <td>Proprietario</td>
+            <td></td>
+        {{else}}
+          <form action="/admin/usuarios/edit_admin" method="POST">
+            <input type="hidden" name="id" value="{{_id}}"/>
+            {{#if eAdmin}}
+              <input type="hidden" name="eAdmin" value="false"/>
+              <td>
+                <button type="submit" class="btn">Administrador</button>
+              </td>
+            {{else}}
+              <input type="hidden" name="eAdmin" value="true"/>
+              <td>
+                <button type="submit" class="btn">Comum</button>
+              </td>
+            {{/if}}
+          </form>
+          
+          <form action="/admin/usuarios/bloqueia-usuario" method="POST">
+            <input type="hidden" name="id" value="{{_id}}"/>
+            {{#if eBlocked}}
+              <input type="hidden" name="eBlocked" value="false"/>
+              <td>
+                <button type="submit" class="btn">Bloqueado</button>
+              </td>
+            {{else}}
+              <input type="hidden" name="eBlocked" value="true"/>
+              <td>
+                <button type="submit" class="btn">Ok</button>
+              </td>
+            {{/if}}
+          </form>
+
+          <form action="/admin/usuarios/deletar" method="POST">
+            <input type="hidden" name="id" value="{{_id}}"/>
+            <td>
+              <button type="submit" class="btn btn-danger btn-lg">X</button>
+            </td>
+          </form>
+        {{/if}}
+      </tr>       
+    {{/each}}
+  </tbody>
+</table>
