@@ -5,7 +5,7 @@
 <h3>Editar Postagem: </h3>
 <form action="/perfil/minhas-postagens/edit" method="POST">
     <input type="hidden" value="{{post._id}}" name="post_id"/>
-     <input type="hidden" value="{{user._id}}" name="user_id"/>
+    <input type="hidden" value="{{user._id}}" name="user_id"/>
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label for="titulo">Título:</label>
@@ -17,10 +17,10 @@
             <input type="text" class="form-control" name="description" value="{{post.description}}"/>
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row">        
         <div class="col-md-6 mb-3">
-            <label for="slug">Slug:</label>
-            <input type="text" class="form-control" name="slug"  value="{{post.slug}}"/>
+            <label for="conteudo">Conteúdo:</label>
+             <textarea type="text" class="form-control" name="content" rows="10">{{post.content}}</textarea>
         </div>
         <div class="col-md-6 mb-3">
             <label>Categoria:</label>
@@ -32,15 +32,10 @@
                     <option value="">Nenhuma categoria registrada</option>
                 {{/each}}
             </select>
+            <div class="text-center">                
+                <button class="btn btn-primary mt-3 mb-5" type="submit">Criar Postagem</button>
+            </div>
         </div>
     </div>
-    <div class="form-row">
-        <div class="col-md-6 mb-3">
-            <label for="conteudo">Conteúdo:</label>
-            <textarea type="text" class="form-control" name="content">{{post.content}}</textarea>
-        </div>
-    </div>
-    <div class="form-row">
-        <button class="btn btn-primary" type="submit">Editar Postagem</button>
-    </div>
+   
 </form>

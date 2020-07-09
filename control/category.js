@@ -4,6 +4,8 @@ const mongoose        = require('mongoose');
 const Category        = mongoose.model('categories');
 const Post            = mongoose.model('posts');
 const {slugFormatter} = require('../helpers/slugFormatter');
+const arrayToObject   = require('../helpers/arrayToObject');
+const url             = require('url');
 
 exports.showCategories = function(req, res) {
     Category.find().sort({name: 'asc'}).lean().then((categories) => {
@@ -44,15 +46,20 @@ exports.fillCategoriesComboBox = function (req, res) {
 
  // Gerenciamento de Categorias
     function fieldsValidatorCategory (fields){
-        let formErrors = [];
-
+        let formErrors = new Array();        
+        
         if(!fields.name || typeof fields.name == undefined || fields.name == null){
-            formErrors.push({error: 'Nome inválido'});
+            formErrors.fieldNameError = 'Nome inválido';
         } else if(fields.name.length < 2){
-            formErrors.push({error: "Nome da categoria é muito pequena"});
+            formErrors.fieldNameError = 'Nome da categoria é muito pequena';
+            formErrors.fieldNameValue = fields.name;
+        }            
+        
+        if (formErrors.length > 0){
+            formErrors.fieldIDValue = fields.id;
         }
 
-        return formErrors;
+        return arrayToObject(formErrors);
     }
 
     exports.listCategories = function (req, res){
@@ -67,7 +74,7 @@ exports.fillCategoriesComboBox = function (req, res) {
     exports.createCategory = function (req, res){
         let formErrors = fieldsValidatorCategory(req.body);
 
-        if(formErrors.length > 0){
+        if(Object.keys(formErrors).length != 0){
             res.render('../views/layouts/admin/category/create-category', {formErrors: formErrors});
         } else {
             const newCategory = {
@@ -85,7 +92,7 @@ exports.fillCategoriesComboBox = function (req, res) {
         }
     }
 
-    exports.fillCategoriesForm = function (req, res){
+    exports.fillCategoriesForm = function (req, res){        
         Category.findOne({_id:req.params.id}).lean().then((category) => {
             res.render('../views/layouts/admin/category/update-category', {category: category});
         }).catch(() => {
@@ -98,9 +105,9 @@ exports.fillCategoriesComboBox = function (req, res) {
         Category.findOne({_id:req.body.id}).then((category) => {
             let formErrors = fieldsValidatorCategory(req.body);
     
-            if(formErrors.length > 0){
+            if(Object.keys(formErrors).length != 0){         
                 req.flash('error_msg', 'Erro ao editar categoria! Existiam campos em branco!');
-                res.redirect('/admin/category/edit/' + req.body.id);
+                res.redirect('/admin/categorias/edit/' + req.body.id);
             } else {
                 category.name = req.body.name;
                 category.slug = slugFormatter(req.body.name);

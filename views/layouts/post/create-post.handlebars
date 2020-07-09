@@ -1,47 +1,77 @@
-{{#each formErrors}}
-    <div class="alert alert-danger">{{error}}</div>
-{{/each}}
-
 <h3>Nova Postagem: </h3>
 <form action="/perfil/minhas-postagens/nova" method="POST">
     <input type="hidden" name="user_id" value="{{user._id}}"/>
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label>Título:</label>
-            <input type="text" class="form-control" name="title"/>
+            {{#if formErrors.fieldTitleError}} 
+                <input type="text" class="form-control is-invalid" name="title"/>
+                <div class="invalid-feedback">
+                    {{formErrors.fieldTitleError}}
+                </div>               
+            {{else}}
+                <input type="text" class="form-control" name="title"/>
+            {{/if}}
         </div>
 
         <div class="col-md-6 mb-3">
             <label>Descrição:</label>
-            <input type="text" class="form-control" name="description"/>
+            {{#if formErrors.fieldDescriptionError}} 
+                <input type="text" class="form-control is-invalid" name="description"/>
+                <div class="invalid-feedback">
+                    {{formErrors.fieldDescriptionError}}
+                </div>               
+            {{else}}
+                <input type="text" class="form-control" name="description"/>
+            {{/if}}
         </div>
     </div>
-    <div class="form-row">
-        <div class="col-md-6 mb-3">
-            <label>Slug:</label>
-            <input type="text" class="form-control" name="slug"/>
-        </div>
-        <div class="col-md-6 mb-3">
-            <label>Categoria:</label>
-            <select name="category" class="custom-select">
-                {{#if categories}}
-                    <option value=""></option>
-                    {{#each categories}}
-                        <option value="{{_id}}">{{name}}</option>
-                    {{/each}}
-                {{else}}
-                    <option value="">Nenhuma categoria registrada</option>
-                {{/if}}
-            </select>
-        </div>
-    </div>
-    <div class="form-row">
+    <div class="form-row">        
         <div class="col-md-6 mb-3">
             <label for="conteudo">Conteúdo:</label>
-            <textarea type="text" class="form-control" name="content"></textarea>
+            {{#if formErrors.fieldContentError}} 
+                <textarea type="text" class="form-control is-invalid" name="content" rows="10"></textarea>
+                <div class="invalid-feedback">
+                    {{formErrors.fieldContentError}}
+                </div>               
+            {{else}}
+                <textarea type="text" class="form-control" name="content" rows="10"></textarea>
+            {{/if}}
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label>Categoria:</label>
+                {{#if formErrors.fieldCategoryError}} 
+                    <select name="category" class="custom-select is-invalid">
+                        {{#if categories}}
+                            <option value=""></option>
+                            {{#each categories}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        {{else}}
+                            <option value="">Nenhuma categoria registrada</option>
+                        {{/if}}
+                    </select>
+                    <div class="invalid-feedback">                        
+                        {{formErrors.fieldCategoryError}}
+                    </div>               
+                {{else}}
+                    <select name="category" class="custom-select">
+                        {{#if categories}}
+                            <option value=""></option>
+                            {{#each categories}}
+                                <option value="{{_id}}">{{name}}</option>
+                            {{/each}}
+                        {{else}}
+                            <option value="">Nenhuma categoria registrada</option>
+                        {{/if}}
+                    </select>
+                {{/if}}
+           
+            <div class="text-center">                
+                <button class="btn btn-primary mt-3 mb-5" type="submit">Criar Postagem</button>
+            </div>
         </div>
     </div>
-    <div class="form-row">
-        <button class="btn btn-primary" type="submit">Criar Postagem</button>
-    </div>
+   
 </form>

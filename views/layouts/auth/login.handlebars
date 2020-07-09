@@ -1,14 +1,27 @@
-{{#each formErrors}}
-    <div class="alert alert-danger">{{error}}</div>
-{{/each}}
-
 <h2 class="text-center">Login </h2>
 <form action="/auth/login" method="post">
     <label for="email">Email: </label>
-    <input type="email" class="form-control" name="email">
+    {{#if formErrors.fieldEmailError}}
+        <input type="email" class="form-control is-invalid" name="email">
+        <div class="invalid-feedback">
+            {{formErrors.fieldEmailError}}
+        </div>               
+    {{else}}                
+        <input type="email" class="form-control" name="email"/>
+    {{/if}}
+
     <br>
+
     <label for="senha">Senha: </label>
-    <input type="password" class="form-control" name="password">
+    {{#if formErrors.fieldPasswordError}}
+        <input type="password" class="form-control is-invalid" name="password">
+        <div class="invalid-feedback">
+            {{formErrors.fieldPasswordError}}
+        </div>               
+    {{else}}                
+        <input type="password" class="form-control" name="password"/>
+    {{/if}}
+
     <br>
     <button class="btn btn-success" type="submit">Entrar</button>
 </form>

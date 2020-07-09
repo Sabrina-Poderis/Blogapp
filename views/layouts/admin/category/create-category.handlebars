@@ -1,13 +1,16 @@
-{{#each formErrors}}
-    <div class="alert alert-danger">{{error}}</div>
-{{/each}}
-
 <h3>Nova Caterogia: </h3>
 <form action="/admin/categorias/nova" method="POST">
     <div class="form-row">
         <div class="col-md-6 mb-3">
             <label>Nome:</label>
-            <input type="text" class="form-control" name="name"/>
+            {{#if formErrors.fieldNameError}}
+                <input type="text" class="form-control is-invalid" name="name" value="{{formErrors.fieldNameValue}}">
+                <div class="invalid-feedback">
+                   {{formErrors.fieldNameError}}
+                </div>               
+            {{else}} 
+                <input type="text" class="form-control" name="name"/>
+            {{/if}}
         </div>
     </div>
     <div class="form-row">

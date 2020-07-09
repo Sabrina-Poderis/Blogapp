@@ -6,6 +6,7 @@ const Post            = mongoose.model('posts');
 const User            = mongoose.model('users');
 const Category        = mongoose.model('categories');
 const {slugFormatter} = require('../helpers/slugFormatter');
+const arrayToObject = require('../helpers/arrayToObject');
 
 //Mostra Postagens
     exports.showPost = function (req, res) {        
@@ -37,7 +38,7 @@ const {slugFormatter} = require('../helpers/slugFormatter');
     }
 
     exports.listApprovedPosts_PostsPage = function (req, res) {
-        Post.find({status: 'aprovado'}).populate('category').sort({date:'desc'}).then((posts) => {
+        Post.find({status: 'aprovado'}).populate('category').sort({date:'desc'}).lean().then((posts) => {
             res.render('../views/layouts/post/index', {posts: posts})
         }).catch((error) => {
             req.flash('error_msg', 'Ocorreu um erro!' + error);
@@ -56,49 +57,48 @@ const {slugFormatter} = require('../helpers/slugFormatter');
 
 //Operações Postagens
     function fieldsValidatorPost (fields){
-        let formErrors = [];
+        let formErrors = new Array();
 
         if(!fields.title || typeof fields.title == undefined || fields.title == null){
-            formErrors.push({error: 'Título inválido'});
+            formErrors.fieldTitleError = 'Título inválido';           
         } else if(fields.title.length < 2){
-            formErrors.push({error: "Título é muito pequeno"});
-        }
-        
-        if(!fields.slug || typeof fields.slug == undefined || fields.slug == null){
-            formErrors.push({error: 'Slug inválido'});
-        } else if(fields.slug.length < 2){
-            formErrors.push({error: "Slug é muito pequeno"});
+            formErrors.fieldTitleError = "Título é muito pequeno";
         }
         
         if(!fields.description || typeof fields.description == undefined || fields.description == null){
-            formErrors.push({error: 'Descrição inválida'});
+            formErrors.fieldDescriptionError =  'Descrição inválida';
         } else if(fields.description.length < 2){
-            formErrors.push({error: "Descrição é muito pequena"});
+            formErrors.fieldDescriptionError =  "Descrição é muito pequena";
         }
         
         if(!fields.content || typeof fields.content == undefined || fields.content == null){
-            formErrors.push({error: 'Conteúdo inválido'});
+            formErrors.fieldContentError = 'Conteúdo inválido';
         } else if(fields.content.length < 2){
-            formErrors.push({error: "Conteúdo é muito pequeno"});
+            formErrors.fieldContentError = "Conteúdo é muito pequeno";
         }
         
         if(!fields.category || typeof fields.category == undefined || fields.category == null){
-            formErrors.push({error: 'Categoria inválida'});
+            formErrors.fieldCategoryError = 'Categoria inválida';
         } 
         
         if(!fields.user_id || typeof fields.user_id == undefined || fields.user_id == null){
-            formErrors.push({error: 'Usuário inválido'});
+            formErrors.fieldUserError = 'Usuário inválido';
         }
 
-        return formErrors;
+        return arrayToObject(formErrors);
     }
 
     exports.createPost = function (req, res) {
         let formErrors = fieldsValidatorPost(req.body);
         let defineStatus;
 
-        if(formErrors.length > 0){
-            res.render('../views/layouts/post/create-post', {formErrors: formErrors});
+        if(Object.keys(formErrors).length != 0){
+            Category.find().lean().then((categories) => {
+                res.render('../views/layouts/post/create-post', {categories: categories, formErrors: formErrors})
+            }).catch((error) => {
+                req.flash('error_msg', 'Ocorreu um erro!' + error);
+                res.redirect('/');
+            });
         } else {
             User.findOne({_id:req.body.user_id}).lean().then((user) => {
                 if(user.eAdmin == true){
@@ -109,7 +109,7 @@ const {slugFormatter} = require('../helpers/slugFormatter');
                 
                 const newPost = {
                     title      : req.body.title,
-                    slug       : slugFormatter(req.body.slug),
+                    slug       : slugFormatter(req.body.title),
                     description: req.body.description,
                     content    : req.body.content,
                     category   : req.body.category,
@@ -150,7 +150,7 @@ const {slugFormatter} = require('../helpers/slugFormatter');
             let formErrors = fieldsValidatorPost(req.body);
             let defineStatus;
 
-            if(formErrors.length > 0){
+            if(Object.keys(formErrors).length != 0){
                 req.flash('error_msg', 'Erro ao editar postagem! Existiam campos em branco!');
                 res.redirect('/perfil/minhas-postagens/edit/' + req.body.post_id);
             } else {
@@ -159,10 +159,10 @@ const {slugFormatter} = require('../helpers/slugFormatter');
                         defineStatus = 'aprovado';
                     } else {
                         defineStatus = 'em análise';
-                    }
+                    }                  
 
                     post.title       = req.body.title;
-                    post.slug        = slugFormatter(req.body.slug);
+                    post.slug        = slugFormatter(req.body.title);
                     post.description = req.body.description;
                     post.content     = req.body.content;
                     post.category    = req.body.category;

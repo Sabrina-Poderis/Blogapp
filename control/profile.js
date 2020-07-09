@@ -1,7 +1,8 @@
 require("../models/User");
-const mongoose = require("mongoose");
-const bcrypt   = require("bcryptjs");
-const User     = mongoose.model("users");
+const mongoose      = require("mongoose");
+const bcrypt        = require("bcryptjs");
+const User          = mongoose.model("users");
+const arrayToObject = require('../helpers/arrayToObject');
 
 exports.fillUserForm = function(req, res) {
     User.findOne({_id:req.params.id}).lean().then((user) => {
@@ -13,48 +14,57 @@ exports.fillUserForm = function(req, res) {
 }
 
 function fieldsValidatorProfile (fields){
-    let formErrors = [];
+    let formErrors = new Array();
 
-    if(!fields.name || typeof fields.name == undefined || fields.name == null || fields.name.length < 2){
-        formErrors.push({error: "Nome inválido"})
+    if(!fields.name || typeof fields.name == undefined || fields.name == null){
+        formErrors.fieldNameError = 'Nome inválido';
+    } else if(fields.name.length < 3){
+        formErrors.fieldNameError = "Seu nome deve ter no mínimo 3 caracteres";
+    } 
+
+    if(!fields.surname || typeof fields.surname == undefined || fields.surname == null){
+        formErrors.fieldSurnameError = "Sobrenome inválido";
+    } else if(fields.surname.length < 2){
+        formErrors.fieldSurnameError = "Seu sobrenome deve ter no mínimo 2 caracteres";
+    } 
+
+    if(!fields.user_name || typeof fields.user_name == undefined || fields.user_name == null){
+        formErrors.fieldUsernameError =  "Nome de usuário inválido";
+    } else if(fields.user_name.length < 5){
+        formErrors.fieldUsernameError = "Seu nome de usuário deve ter no mínimo 5 caracteres";
+    } 
+
+    if(!fields.email || typeof fields.email == undefined || fields.email == null){
+        formErrors.fieldEmailError = "E-mail inválido";
+    } else if(fields.email.length < 5){
+        formErrors.fieldEmailError = "Seu e-mail deve ter no mínimo 5 caracteres";
     }
 
-    if(!fields.surname || typeof fields.surname == undefined || fields.surname == null || fields.surname.length < 2){
-        formErrors.push({error: "Sobrenome inválido"})
-    }
-
-    if(!fields.user_name || typeof fields.user_name == undefined || fields.user_name == null || fields.user_name.length < 2){
-        formErrors.push({error: "Nome de usuário inválido"})
-    }
-
-    if(!fields.email || typeof fields.email == undefined || fields.email == null || fields.email.length < 2){
-        formErrors.push({error: "E-mail inválido"})
-    }
-    return formErrors;
+    return arrayToObject(formErrors);
 }
 
 function fieldsValidatorPassword (fields){
-    let formErrors = [];
+    let formErrors = new Array();
 
     if(!fields.new_password || typeof fields.new_password == undefined || fields.new_password == null){
-        formErrors.push({error: "Senha inválida"})
+        formErrors.fieldNewPasswordError = "Senha inválida";
     } else if(fields.new_password.length < 5){
-        formErrors.push({error: "Sua senha deverá ter no mínimo 5 caracteres"})
+        formErrors.fieldNewPasswordError ="Sua senha deverá ter no mínimo 5 caracteres";
     } 
     
     if(!fields.password_confirmation || typeof fields.password_confirmation == undefined || fields.password_confirmation == null){
-        formErrors.push({error: "Confirme sua senha"})
+        formErrors.fieldPasswordConfirmationError = "Confirme sua senha";
     } else if(fields.new_password != fields.password_confirmation){
-        formErrors.push({error: "As senhas estão diferentes"})
+        formErrors.fieldPasswordConfirmationError = "As senhas estão diferentes";
     }
 
-    return formErrors;
+    return arrayToObject(formErrors);
 }
 
 exports.updateUser = function(req, res) {
     let formErrors = fieldsValidatorProfile(req.body);
 
-    if(formErrors.length > 0){
+    if(Object.keys(formErrors).length != 0){
         res.render('../views/layouts/profile/update-registry', {formErrors: formErrors});
     } else {
         User.findOne({user_name:req.body.user_name}).then((user) => {
@@ -100,7 +110,7 @@ exports.updatePassword = function(req, res){
     User.findOne({_id:req.body.id}).then((user) => {
         let formErrors = fieldsValidatorPassword(req.body);
 
-        if(formErrors.length > 0){
+        if(Object.keys(formErrors).length != 0){
             res.render('../views/layouts/profile/update-password', {formErrors: formErrors});
         } else {
             user.password  = req.body.new_password;

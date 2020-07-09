@@ -1,42 +1,14 @@
-<div class="row">
-    <div class="col-sm-8">
+ <div class="row">
+    <div class="col-md-8">
         <div class="jumbotron">
             <h1 class="display-4 ">Blog do Node</h1>
             <p class="lead">Este é um Blog simples, desenvolvido com Node.js + Espress + MongoDB sob as orientações de Victor Lima, em seu Curso de NodeJs</p>
-            <hr class="my-4">
+            <hr>
             <p>Aqui você vai poder ler sobre as novidades do mundo da computação!</p>
         </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="card">
-            {{#if user}}
-            <div class="card-header">
-                <h5 class="card-title">Bem vindo {{user.name}}</h5>
-            </div>
-                <div class="card-body">
-                    <p class="card-text">Um exemplo de texto rápido para construir o título do card e fazer preencher o conteúdo do card.</p>
-                    <a href="/perfil/" class="btn btn-success">Perfil</a>
-                    <a href="/perfil/minhas-postagens" class="btn btn-success">Postagens</a>
-                    <a href="/auth/logout" class="btn btn-success">Sair</a>
-                </div>
-            {{else}}
-                <div class="text-center">
-                    <div class="card-header">
-                        <h5>É novo aqui? <a href="/auth/registro">Registre-se!</a></h5>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Já tem uma conta? <a href="/auth/login">Faça login</a></h5>
-                    </div>
-                </div>
-            {{/if}}
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-8">
+            
         {{#each posts}}
-            <div class="card mt-4">
+            <div class="card mb-5">
                 <div class="card-header">
                     <h3 class="card-title">{{title}}</h3>
                 </div>
@@ -55,11 +27,11 @@
                 </div>
             </div>
         {{else}}
-            <hr class="mt-5"/>
+            <hr class="mb-5"/>
             <h2 class="text-center">Não existem postagens no momento!</h2>
         {{/each}}
-    </div>
-    <div class="col-sm-4">
-        aaa
+    </div>        
+    <div class="col-md-4">
+        {{>_side}}
     </div>
 </div>

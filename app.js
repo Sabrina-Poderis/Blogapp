@@ -23,6 +23,7 @@
         const flash       = require('connect-flash');
     // Control Postagem    
         const postControl = require('./control/post');
+        const bootstrapValidate = require( 'bootstrap-validate');
     // Moment
         const moment = require('moment');
 
@@ -62,15 +63,14 @@
         mongoose.connect(db.mongoURI, {
             useNewUrlParser: true , 
             useUnifiedTopology: true
-        }).then(()=>{
-            console.log("MongoDB Conectado...");
         }).catch((erro)=>{
-            console.log("Houve um erro: " + erro);
+            console.log("Houve um erro no MongoDB: " + erro);
         });
     //Public
         app.use(express.static('public'));
     // Rotas
         app.get('/', postControl.listApprovedPosts_HomePage);
+
         app.use('/postagem', post);
         app.use('/categoria', category);
         app.use('/admin', admin);

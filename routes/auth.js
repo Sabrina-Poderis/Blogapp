@@ -17,6 +17,8 @@ router.get('/login', (req, res) => {
 
 router.post("/login", authControl.login);
 
+router.post("/login-side", authControl.login_side);
+
 router.get("/logout", authControl.logout);
 
 module.exports = router;
