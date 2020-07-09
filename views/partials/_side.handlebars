@@ -1,10 +1,18 @@
-<div class="card">
+<div class="card mb-5">
     {{#if user}}
         <h5 class="card-header">Olá {{user.name}}!</h5>
         <div class="card-body">
-            <a href="/perfil/" class="btn btn-success">Perfil</a>
-            <a href="/perfil/minhas-postagens" class="btn btn-success">Postagens</a>
-            <a href="/auth/logout" class="btn btn-success">Sair</a>
+            <div class="d-flex bd-highlight">
+                <div class="p-2 flex-fill">
+                    <a href="/perfil/" class="btn btn-success">Perfil</a>
+                </div>
+                <div class="p-2 flex-fill">
+                    <a href="/perfil/minhas-postagens" class="btn btn-success">Postagens</a>
+                </div>
+                <div class="p-2 flex-fill">
+                    <a href="/auth/logout" class="btn btn-success">Sair</a>
+                </div>
+            </div>
         </div>
     {{else}}
       <h5 class="card-header">Login</h5>

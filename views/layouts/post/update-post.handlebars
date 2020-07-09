@@ -1,6 +1,11 @@
-{{#each formErrors}}
-    <div class="alert alert-danger">{{error}}</div>
-{{/each}}
+<nav aria-label="breadcrumb">           
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+		<li class="breadcrumb-item" aria-current="page"><a href="/perfil">Área do Usuário</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a href="/perfil/minhas-postagens">Minhas Postagens</a></li>
+        <li class="breadcrumb-item active">Editar Postagem</li>
+	</ol>
+</nav>
 
 <h3>Editar Postagem: </h3>
 <form action="/perfil/minhas-postagens/edit" method="POST">

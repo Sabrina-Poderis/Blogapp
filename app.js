@@ -23,7 +23,6 @@
         const flash       = require('connect-flash');
     // Control Postagem    
         const postControl = require('./control/post');
-        const bootstrapValidate = require( 'bootstrap-validate');
     // Moment
         const moment = require('moment');
 

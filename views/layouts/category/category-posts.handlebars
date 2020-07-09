@@ -1,9 +1,16 @@
 <div class="row">
     <div class="col-md-8">
+        <nav aria-label="breadcrumb">           
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+                <li class="breadcrumb-item" aria-current="page"><a href="/categoria">Categorias</a></li>
+                <li class="breadcrumb-item active">{{category.name}}</li>
+            </ol>
+        </nav>
         <h1>{{category.name}}</h1>
         <hr>
         {{#each posts}}
-            <div class="card mt-4">
+            <div class="card mb-5">
                 <div class="card-header">
                     <h3 class="card-title">{{title}}</h3>
                 </div>
