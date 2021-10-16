@@ -1,73 +1,93 @@
-<nav aria-label="breadcrumb">           
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
-		<li class="breadcrumb-item" aria-current="page"><a href="/admin">Área Administrativa</a></li>
-    <li class="breadcrumb-item active">Lista de Usuarios</li>
-	</ol>
-</nav>
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Usuários</h1>
+            <hr>
+            <h5 class="text-center">Área administativa</h5>
+        </div>
+    </div>
+</div>
 
-<h2 class="text-center">Lista de Usuarios</h2>
-<hr/>
+<div class="container">
+  <nav aria-label="breadcrumb">           
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active">Lista de Usuários</li>
+    </ol>
+  </nav>
 
-<table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Nome</th>
-      <th scope="col">Usuario</th>
-      <th scope="col">Email</th>
-      <th scope="col">Tipo de Usuario</th>
-      <th scope="col">Bloquear</th>
-      <th scope="col">Excluir</th>
-    </tr>
-  </thead>
-  <tbody>
+  <a href="/admin/usuarios/add" class="btn bg-seagreen text-white mb-4" >Novo Usuário</a>
+
+  <div class="row">
     {{#each users}}
-      <tr>
-        <td>{{name}} {{surname}}</td>
-        <td>{{user_name}}</td>
-        <td>{{email}}</td>
-        {{#if this.eOwner}}
-            <td>Proprietario</td>
-            <td></td>
-        {{else}}
-          <form action="/admin/usuarios/edit_admin" method="POST">
-            <input type="hidden" name="id" value="{{_id}}"/>
-            {{#if eAdmin}}
-              <input type="hidden" name="eAdmin" value="false"/>
-              <td>
-                <button type="submit" class="btn">Administrador</button>
-              </td>
-            {{else}}
-              <input type="hidden" name="eAdmin" value="true"/>
-              <td>
-                <button type="submit" class="btn">Comum</button>
-              </td>
-            {{/if}}
-          </form>
-          
-          <form action="/admin/usuarios/bloqueia-usuario" method="POST">
-            <input type="hidden" name="id" value="{{_id}}"/>
-            {{#if eBlocked}}
-              <input type="hidden" name="eBlocked" value="false"/>
-              <td>
-                <button type="submit" class="btn">Bloqueado</button>
-              </td>
-            {{else}}
-              <input type="hidden" name="eBlocked" value="true"/>
-              <td>
-                <button type="submit" class="btn">Ok</button>
-              </td>
-            {{/if}}
-          </form>
+      <div class="col-lg-4 col-md-4 col-sm-12 mb-5">
+        <div class="col-4">
+          <a href="/admin/usuarios/edit/{{this._id}}">
+            <img src="/img/icons/user.png" class="card-img">
+          </a>
+        </div>
 
-          <form action="/admin/usuarios/deletar" method="POST">
-            <input type="hidden" name="id" value="{{_id}}"/>
-            <td>
-              <button type="submit" class="btn btn-danger btn-lg">X</button>
-            </td>
-          </form>
-        {{/if}}
-      </tr>       
+        <div class="col-8 text-break">
+          <div class="card-title">
+            <a href="/admin/usuarios/edit/{{this._id}}" class="text-decoration-none text-seagreen">
+              <h5>{{name}} {{surname}}</h5>
+            </a>
+          </div>
+
+          <h6 class="card-subtitle mb-2 text-muted">{{user_name}}</h6>
+          
+          {{#if this.eOwner}}
+            <span class="badge rounded-pill bg-greencrayola">Proprietária</span>
+          {{else}}
+            <div class="row">
+              <div class="col-6">
+                <form action="/admin/usuarios/bloqueia-usuario" method="POST">
+                  <input type="hidden" name="id" value="{{_id}}"/>
+                  {{#if eBlocked}}
+                    <input type="hidden" name="eBlocked" value="false"/>
+                    <button type="submit" class="btn">
+                      <span class="badge rounded-pill bg-danger">Bloqueado</span>
+                    </button>
+                  {{else}}
+                    <input type="hidden" name="eBlocked" value="true"/>
+                    <button type="submit" class="btn">
+                      <span class="badge rounded-pill bg-greencrayola">Desbloqueado</span>
+                    </button>
+                  {{/if}}
+                </form>
+              </div>
+
+              <div class="col-6">
+                <button type="button" class="btn" onclick="deletarUsuario('{{this._id}}')">
+                  <span class="badge rounded-pill bg-danger">Excluir</span>
+                </button>
+                <form action="/admin/usuarios/deletar" method="POST" id="form-delete">
+                  <input type="hidden" name="id" value="{{_id}}" id="delete-id"/>
+                </form>
+              </div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    {{else}}
+      <h3 class="text-center mt-5">Não existem usuários para gerenciar!</h3>
     {{/each}}
-  </tbody>
-</table>
+  </div>
+</div>
+
+<script>
+  function deletarUsuario(id) {
+    swal({
+      title: "Você tem certeza ?",
+      text: "Deseja deletar este usuário?",
+      icon: "warning",
+      buttons: ["Não", "Sim"],
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        $("#delete-id").val(id);
+        $("#form-delete").submit();
+      }
+    });
+  }
+</script>

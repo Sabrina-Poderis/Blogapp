@@ -1,8 +1,7 @@
-const router       = require('express').Router();
-const postControl  = require('../control/post');
+const router          = require('express').Router();
+const postsController = require('../control/postsController');
 
-router.get('/', postControl.listApprovedPosts_PostsPage);
-
-router.get('/:slug', postControl.showPost);
+router.get('/', postsController.list);
+router.get('/:slug', postsController.show);
 
 module.exports = router;

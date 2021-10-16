@@ -1,44 +1,44 @@
 const router               = require('express').Router();
 const {adminAuthenticated} = require('../helpers/adminAuthenticated');
-const categoryControl      = require('../control/category');
-const postControl          = require('../control/post');
-const userControl          = require('../control/user');
-
-router.get('/', adminAuthenticated, (req, res) => {
-    res.render('../views/layouts/admin/index');
-});
+const categoriesController = require('../control/categoriesController');
+const postsController      = require('../control/postsController');
+const usersController      = require('../control/usersController');
 
 // Gerenciamento de Postagens
-    router.get('/postagens', adminAuthenticated, postControl.fillPostTable);
+    router.get('/postagens', adminAuthenticated, postsController.indexAdmin);
 
-    router.get('/postagens/:slug', adminAuthenticated, postControl.showPostUnderReview);
+    router.get('/postagens/add', adminAuthenticated, postsController.create);
 
-    router.post('/postagens/edit-status/', adminAuthenticated, postControl.updateStatus);
+    router.post('/postagens/nova', postsController.uploadFile, adminAuthenticated, postsController.store);
 
-    router.post('/postagens/deletar/', adminAuthenticated, postControl.deletePost_Admin);
+    router.get('/postagens/edit/:id', adminAuthenticated, postsController.edit);
+
+    router.post('/postagens/edit/', postsController.uploadFile, adminAuthenticated, postsController.update);
+
+    router.post('/postagens/deletar/', adminAuthenticated, postsController.delete);
 
 // Gerenciamento de Categorias
-    router.get('/categorias', adminAuthenticated, categoryControl.listCategories);
+    router.get('/categorias', adminAuthenticated, categoriesController.index);
 
-    router.get('/categorias/add', adminAuthenticated, (req, res) => {
-        res.render('../views/layouts/admin/Category/create-category');
-    });
+    router.post('/categorias/nova', adminAuthenticated, categoriesController.store);
 
-    router.post('/categorias/nova', adminAuthenticated, categoryControl.createCategory);
+    router.post('/categorias/edit/', adminAuthenticated, categoriesController.update);
 
-    router.get('/categorias/edit/:id', adminAuthenticated, categoryControl.fillCategoriesForm);
-
-    router.post('/categorias/edit/', adminAuthenticated, categoryControl.updateCategory);
-
-    router.post('/categorias/deletar/', adminAuthenticated, categoryControl.deleteCategory);
+    router.post('/categorias/deletar/', adminAuthenticated, categoriesController.deleteCategory);
 
 // Gerenciamento de Usuários
-    router.get('/usuarios', adminAuthenticated, userControl.fillUserTable);
+    router.get('/usuarios', adminAuthenticated, usersController.index);
 
-    router.post('/usuarios/edit_admin/', adminAuthenticated, userControl.updateUserStatus);
+    router.get('/usuarios/add', adminAuthenticated, usersController.create);
 
-    router.post('/usuarios/bloqueia-usuario/', adminAuthenticated, userControl.blockUser); 
+    router.post('/usuarios/nova', adminAuthenticated, usersController.store);
 
-    router.post('/usuarios/deletar/', adminAuthenticated, userControl.deleteUser); 
+    router.get('/usuarios/edit/:id', adminAuthenticated, usersController.edit);
+
+    router.post('/usuarios/edit/', adminAuthenticated, usersController.update);
+
+    router.post('/usuarios/bloqueia-usuario/', adminAuthenticated, usersController.blockUser); 
+
+    router.post('/usuarios/deletar/', adminAuthenticated, usersController.delete); 
 
 module.exports = router;

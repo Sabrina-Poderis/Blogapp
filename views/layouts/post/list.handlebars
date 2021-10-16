@@ -1,0 +1,51 @@
+{{!-- Container --}}
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Postagens</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            {{!-- Breadcrumb --}}
+            <nav aria-label="breadcrumb">           
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Postagens</li>              
+                </ol>
+            </nav>
+
+            {{!-- Postagens --}}
+            {{#each posts}}            
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <a href="/postagem/{{slug}}">
+                            <img src="/img/posts/{{img}}" class="card-img" alt="...">
+                        </a>
+                    </div>
+                    <div class="col-md-8 text-break">
+                        <h5 class="card-title">
+                            <a href="/postagem/{{slug}}" class="text-decoration-none text-seagreen">
+                                <h5>{{title}}</h5>
+                            </a>
+                        </h5>
+                        <p class="card-text">{{description}}</p>
+
+                        <span class="badge rounded-pill bg-greencrayola">{{category.name}}</span>
+                    </div>
+                </div>             
+            {{else}}
+                <h2 class="text-center">Não existem postagens no momento!</h2>
+            {{/each}}
+
+        </div>
+
+        {{!-- Aside --}}
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            {{>_side}}
+        </div>
+    </div>
+</div>

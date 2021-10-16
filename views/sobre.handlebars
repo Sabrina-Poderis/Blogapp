@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Sobre o blog</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+
+            {{!-- Info --}}
+            <div class="container p-5">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <img src="/img/sobre.svg" class="img-fluid" alt="Responsive image">
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <p>Este blog foi desenvolvido sob as orientações do <a target="_blank" href="https://www.youtube.com/GuiadoProgramador/">Guia do programador</a>, em seu <a target="_blank" href="https://www.youtube.com/playlist?list=PLJ_KhUnlXUPtbtLwaxxUxHqvcNQndmI4B">curso de NodeJS</a> para fins de aprendizado e desenvolvimento pessoal!</p>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Alterações adicionais --}}
+
+            <h2 class="text-center">Alterações adicionais</h2>
+            <p>Foram incluídas algumas implementações a mais após o término do curso, como por exemplo:</p>
+            <ul>
+                <li>Melhorias no front-end</li>
+                <li>Upload de imagem</li>
+                <li>Gerenciamento de usuários</li>
+                <li>Utilização de funções assíncronas</li>
+            </ul>
+        </div>        
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            {{>_side}}
+        </div>
+    </div>
+</div>

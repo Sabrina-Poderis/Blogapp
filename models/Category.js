@@ -16,4 +16,16 @@ const Category = new Schema({
     },
 });
 
+Category.statics.getCategories = function() {
+    return new Promise((resolve, reject) => {
+        this.find((error, categories) =>{
+            if(error){
+                console.error(error);
+                return reject(error);
+            }
+            resolve(categories);
+        }).sort({name: 'asc'}).lean()
+    })
+};
+
 mongoose.model("categories", Category);

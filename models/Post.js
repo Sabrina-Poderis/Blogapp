@@ -35,6 +35,10 @@ const Post = new Schema({
     status:{
         type: String,
         required: true
+    },
+    img:{
+        type: String,
+        default: 'default.png'
     }
 });
 

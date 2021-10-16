@@ -1,8 +1,7 @@
-const router          = require('express').Router();
-const controlCategory = require('../control/category');
+const router               = require('express').Router();
+const categoriesController = require('../control/categoriesController');
 
-router.get('/', controlCategory.showCategories)
-
-router.get('/:slug', controlCategory.showCategoryPosts);
+router.get('/', categoriesController.list)
+router.get('/:slug', categoriesController.listCategoryPosts);
 
 module.exports = router;

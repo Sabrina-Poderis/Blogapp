@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+
+            {{!-- Breadcrumb --}}
+            <nav aria-label="breadcrumb">           
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item" aria-current="page"><a href="/postagem">Postagens</a></li>       
+                    <li class="breadcrumb-item active">{{post.title}}</li>
+                </ol>
+            </nav>
+
+            {{!-- Postagem --}}
+            <div class="container">
+                <h2>{{post.title}}</h2>
+                <p> Por Sabrina Poderis - {{#formatDate post.date}}{{/formatDate}}</p>
+
+                <hr>
+                <h5>{{post.description}}</h5>
+
+                <img src="/img/posts/{{post.img}}" class="img-fluid" alt="Responsive image">
+                <p class="text-break">{{post.content}}</p>
+            </div>
+        </div>        
+
+        {{!-- Aside --}}
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            {{>_side}}
+        </div>
+    </div>
+</div>

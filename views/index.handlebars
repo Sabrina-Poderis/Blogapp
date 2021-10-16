@@ -1,37 +1,59 @@
- <div class="row">
-    <div class="col-md-8">
-        <div class="jumbotron">
-            <h1 class="display-4 ">Blog do Node</h1>
-            <p class="lead">Este é um Blog simples, desenvolvido com Node.js + Espress + MongoDB sob as orientações de Victor Lima, em seu Curso de NodeJs</p>
-            <hr>
-            <p>Aqui você vai poder ler sobre as novidades do mundo da computação!</p>
+{{!-- Posts principais --}}
+
+<div class="container">
+    <div class="row justify-content-between">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            <img src="/img/index1.jpg" class="img-index" alt="Responsive image">
         </div>
-            
-        {{#each posts}}
-            <div class="card mb-5">
-                <div class="card-header">
-                    <h3 class="card-title">{{title}}</h3>
-                </div>
-                <div class="card-body">
-                    <div class="card-text">
-                        <p>{{description}}</p>
-                        <a href="/postagem/{{slug}}">
-                            <button class="btn btn-success">
-                                Leia mais
-                            </button>
-                        </a>
-                        <br><br>
-                        <small>Data: {{#formatDate date}}{{/formatDate}}</small><br>
-                        <small>Categoria: {{category.name}}</small>
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <img src="/img/index2.jpg" class="img-index" alt="Responsive image">
+        </div>
+    </div>
+</div>
+
+{{!-- Info --}}
+<div class="container mt-5 p-5">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <img src="/img/sobre.svg" class="img-fluid" alt="Responsive image">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <p>Este blog foi desenvolvido sob as orientações do <a target="_blank" href="https://www.youtube.com/GuiadoProgramador/">Guia do programador</a>, em seu <a target="_blank" href="https://www.youtube.com/playlist?list=PLJ_KhUnlXUPtbtLwaxxUxHqvcNQndmI4B">curso de NodeJS</a> para fins de aprendizado e desenvolvimento pessoal!</p>
+        </div>
+    </div>
+</div>
+
+{{!-- Postagens --}}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="row">      
+                {{#each posts}}
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card mb-5">
+                            <a href="/postagem/{{slug}}">
+                                <img src="/img/posts/{{img}}" class="card-img" alt="...">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="/postagem/{{slug}}" class="text-decoration-none text-seagreen">
+                                        <h5>{{title}}</h5>
+                                    </a>
+                                </h5>
+                                <p class="card-text">{{description}}</p>
+
+                                <span class="badge rounded-pill bg-greencrayola">{{category.name}}</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                {{else}}
+                    <hr class="mb-5"/>
+                    <h2 class="text-center">Não existem postagens no momento!</h2>
+                {{/each}}
             </div>
-        {{else}}
-            <hr class="mb-5"/>
-            <h2 class="text-center">Não existem postagens no momento!</h2>
-        {{/each}}
-    </div>        
-    <div class="col-md-4">
-        {{>_side}}
+        </div>        
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            {{>_side}}
+        </div>
     </div>
 </div>

@@ -1,36 +1,152 @@
-<nav aria-label="breadcrumb">           
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
-		<li class="breadcrumb-item" aria-current="page"><a href="/admin">Área Administrativa</a></li>
-        <li class="breadcrumb-item active">Lista de Categorias</li>
-	</ol>
-</nav>
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Categorias</h1>
+            <hr>
+            <h5 class="text-center">Área administativa</h5>
+        </div>
+    </div>
+</div>
 
-<h2>Lista de Categorias</h2>
-<hr/>
-<a href="/admin/categorias/add" class="btn btn-success mb-4">Nova Categoria</a>
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">           
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Lista de Categorias</li>
+        </ol>
+    </nav>
 
-{{#if categories}}
-    {{#each categories}}
-        <div class="row-sm-6">
-            <div class="card mb-5">
-                <div class="card-body">
-                    <h5 class="card-title">{{name}}</h5>
-                    <p class="card-text">{{slug}}<br/>Data: {{#formatDate date}}{{/formatDate}}</p>
-                    <div class="row">
-                        <a href="/admin/categorias/edit/{{_id}}" class="mr-4 ml-3 btn btn-warning">                           
-                            Editar
-                        </a>
-                        <form action="/admin/categorias/deletar" method="POST">
-                            <input type="hidden" name="id" value="{{_id}}"/>
-                            <button type="submit" class="btn btn-danger">Excluir</button>
-                        </form>
+    <button type="button" class="btn bg-seagreen text-white mb-4" data-toggle="modal" data-target="#novaCategoriaModal">Nova Categoria</button>
+
+    {{#if categories}}
+        <div class="row">
+            {{#each categories}}
+                <div class="col-lg-4 col-md-4 col-sm-12 mb-4">
+                    <div class="card p-3">
+                        <h5 class="card-title text-center">{{name}}</h5>
+                        <div class="card-footer">
+                            <button onclick="editarCategoria('{{_id}}','{{name}}')" class="btn bg-warning btn-block mb-2">
+                                Editar
+                            </button>
+                            <button onclick="deletarCategoria('{{_id}}')" class="btn btn-danger btn-block">
+                                Excluir
+                            </button>
+                            <form id="form-delete" action="/admin/categorias/deletar" method="POST">
+                                <input type="hidden" name="id" id="delete-id"/>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </div>  
+            {{/each}}
+        </div>
+    {{else}}
+        <h2 class="text-center">Não existem categorias, crie uma!</h2>
+    {{/if}}
+</div>
+
+<div id="novaCategoriaModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Categoria</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form action="/admin/categorias/nova" method="POST">
+                    <div class="form-row">
+                        <div class="col-12 mb-3">
+                            <label>Nome</label>
+                            <input type="text" class="form-control" name="name" id="store-name"/>
+                            <div id="store-invalid-feedback" class="invalid-feedback"></div>               
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <button class="btn text-light bg-seagreen btn-block" type="submit">Salvar</button>
+                    </div>
+                </form>
             </div>
         </div>
-    {{/each}}
-{{else}}
-    <hr class="mt-5"/>
-    <h2 class="text-center">Não existem categorias, crie uma!</h2>
-{{/if}}
+    </div>
+</div>
+
+<div id="editarCategoriaModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Categoria</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form action="/admin/categorias/edit" method="POST">
+                    <input type="hidden" name="id" id="update-id"/>
+                    <div class="form-row">
+                        <div class="col-12 mb-3">
+                            <label>Nome</label>
+                            <input type="text" class="form-control" name="name" id="update-name"/>
+                            <div id="update-invalid-feedback" class="invalid-feedback"></div>               
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <button class="btn text-light bg-seagreen btn-block" type="submit">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        // Modal Adicionar
+        bootstrapValidate('#store-name', 'required:Preencha este campo|min:5:Insira até 5 caracteres')
+        {{#if formErrorsStore}}
+            $('#novaCategoriaModal').modal('show');
+            $('#store-name').val('{{formErrorsStore.name.field}}');
+            $('#store-name').addClass('is-invalid');
+            $('#store-invalid-feedback').text('{{formErrorsStore.name.error}}');
+        {{/if}}
+
+        // Modal Editar
+        bootstrapValidate('#update-name', 'required:Preencha este campo|min:5:Insira até 5 caracteres')
+        {{#if formErrorsUpdate}}
+            $('#editarCategoriaModal').modal('show');
+            $('#update-id').val('{{category._id.field}}');
+            $('#update-name').val('{{category.name.field}}');
+            $('#update-name').addClass('is-invalid');
+            $('#update-invalid-feedback').text('{{formErrorsUpdate.name.error}}');
+        {{/if}}
+
+        $('#editarCategoriaModal').on('hidden.bs.modal', function (e) {
+            $('#update-id').val('');
+            $('#update-name').val('');
+        });
+    });
+
+    function editarCategoria(_id, name){
+        $('#editarCategoriaModal').modal('show');
+        $('#update-id').val(_id);
+        $('#update-name').val(name);
+    }
+    
+    function deletarCategoria(id) {
+        swal({
+            title: "Você tem certeza ?",
+            text: "Deseja deletar esta categoria e os seus posts?",
+            icon: "warning",
+            buttons: ["Não", "Sim"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $("#delete-id").val(id);
+                $("#form-delete").submit();
+            }
+        });
+    }
+
+</script>

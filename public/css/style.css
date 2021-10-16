@@ -1,0 +1,22 @@
+.b-font{
+    font-family: 'Montserrat', sans-serif;
+    color: #1A1A1A;
+}
+
+.bg-seagreen{
+    background-color: #5cb270 !important;
+}
+
+.bg-greencrayola{
+    background-color: #82c26e !important;
+}
+
+.text-seagreen{
+    color: #5cb270;
+}
+
+.img-index{
+    max-width: 100%;
+    height: 500px;
+    border-radius: 1%;
+}

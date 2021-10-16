@@ -1,0 +1,45 @@
+{{!-- Container --}}
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Categorias</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-12">
+            {{!-- Breadcrumb --}}
+            <nav aria-label="breadcrumb">           
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"aria-current="page"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Categorias</li>
+                </ol>
+            </nav> 
+
+            {{!-- Categorias --}}
+            <div class="row">
+                {{#each categories}}
+                    <div class="col-sm-4 mb-3">
+                        <div class="card pt-4">
+                            <h5 class="card-title text-center">
+                                 <a href="/categoria/{{slug}}" class="text-decoration-none text-seagreen">
+                                    <h5 class="mt-0">{{name}}</h5>
+                                </a>    
+                            </h5>
+                        </div>           
+                    </div>
+                {{else}}
+                    <h2>Não existem categorias!</h2>
+                {{/each}}
+            </div>
+
+        </div>        
+
+        {{!-- Aside --}}
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            {{>_side}}
+        </div>
+    </div>
+</div>

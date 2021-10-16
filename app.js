@@ -21,8 +21,9 @@
         const passport    = require('passport');
         require('./config/auth')(passport);
         const flash       = require('connect-flash');
-    // Control Postagem    
-        const postControl = require('./control/post');
+    // Controller    
+        const postsController      = require('./control/postsController');
+        const categoriesController = require('./control/categoriesController');
     // Moment
         const moment = require('moment');
 
@@ -40,7 +41,7 @@
         app.use((req, res, next) => {
             res.locals.success_msg = req.flash('success_msg');
             res.locals.error_msg   = req.flash('error_msg');
-            res.locals.error       = req.flash('error');
+            res.locals.error_msg   = req.flash('error');
             res.locals.user        = req.user || null;
             next();
         });
@@ -49,12 +50,20 @@
         app.use(bodyParser.json());
     // Handlebars
         app.engine('handlebars', handlebars({
-            defaultLayout: 'main',
+            defaultLayout: 'layouts/main',
             helpers: {
                 formatDate: (date) => {
                     return moment(date).format('DD/MM/YYYY hh:mm')
+                },
+                ifIdEq: (v1, v2, options) => {
+                    v1 = v1._id.toString();
+                    v2 = v2._id.toString();
+
+                    return (v1 === v2) ? options.fn(this) : options.inverse(this);
                 }
-            }
+            },
+            layoutsDir:  path.resolve(__dirname, 'views'),
+            partialsDir: path.resolve(__dirname, 'views', 'partials')
         }));
         app.set('view engine', 'handlebars');
     // Mongoose
@@ -68,8 +77,8 @@
     //Public
         app.use(express.static('public'));
     // Rotas
-        app.get('/', postControl.listApprovedPosts_HomePage);
-
+        app.get('/', postsController.index);
+        app.get('/sobre', categoriesController.getCategories);
         app.use('/postagem', post);
         app.use('/categoria', category);
         app.use('/admin', admin);

@@ -1,0 +1,189 @@
+<div id="loginModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form action="/auth/login" method="post" id="login-form">
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label for="email">E-Mail</label>
+              <input id="email" type="email" class="form-control" name="email" placeholder="exemplo@exemplo.com.br"/>
+              <div id="email-invalid-feedback" class="invalid-feedback"></div>  
+            </div>                  
+          </div>    
+
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label for="password">Senha</label>
+              <input id="password" type="password"  name="password" class="form-control" autocomplete="on"/>
+              <div id="password-invalid-feedback" class="invalid-feedback"></div>               
+            </div>
+          </div>
+          <div class="form-row text-center align-itens-center">
+            <button class="btn text-light bg-seagreen btn-block" type="submit">Entrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="perfilModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Alterar Perfil</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form action="/perfil/edit" method="POST">
+          <input type="hidden" value="{{user._id}}" name="user_id"/>
+
+          <div class="form-row">
+            <div class="col-md-6">
+              <label>Nome</label>
+              <input id="name" name="name" type="text" class="form-control" value="{{user.name}}"/>
+              <div id="name-invalid-feedback" class="invalid-feedback"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label>Sobrenome</label>
+              <input id="surname" name="surname" type="text" class="form-control" value="{{user.surname}}"/>
+              <div id="surname-invalid-feedback" class="invalid-feedback"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label>Usuário</label>
+              <input id="user_name" name="user_name" type="text" class="form-control" value="{{user.user_name}}"/>
+              <div id="user_name-invalid-feedback" class="invalid-feedback"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label>E-Mail</label>
+              <input id="email_perfil" name="email" type="email" class="form-control" value="{{user.email}}"/>
+              <div id="email_perfil-invalid-feedback" class="invalid-feedback"></div>
+            </div>
+          </div> 
+          <button class="btn text-light bg-seagreen btn-block mt-3" type="submit">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="senhaModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Alterar Senha</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form action="/perfil/edit-senha" method="POST">
+          <input type="hidden" value="{{user._id}}" name="user_id"/>
+          <div class="form-row">
+            <div class="col-md-6">
+              <label>Nova senha</label>
+              <input id="new_password_menu" name="new_password" type="password" class="form-control" autocomplete="on"/>
+              <div id="new_password_menu-invalid-feedback" class="invalid-feedback"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label>Confirme a senha</label>
+              <input id="password_confirmation_menu" name="password_confirmation" type="password" class="form-control" autocomplete="on"/>
+              <div id="password_confirmation_menu-invalid-feedback" class="invalid-feedback"></div>
+            </div>
+          </div>
+          <button class="btn text-light bg-seagreen btn-block mt-3" type="submit">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Login
+  $(document).ready(function(){
+    bootstrapValidate('#email','email:Insira um endereço de email válido');
+    bootstrapValidate('#password','required:Preencha este campo');
+
+    {{#if formErrors}}
+      $('#loginModal').modal('show');
+
+      {{#if formErrors.email}}
+        $('#email').addClass('is-invalid');
+        $('#email-invalid-feedback').text('E-Mail Inválido');
+      {{/if}}
+
+      {{#if formErrors.email}}
+        $('#password').addClass('is-invalid');
+        $('#password-invalid-feedback').text('Senha Inválido');
+      {{/if}}
+    {{/if}}
+  });
+
+  // Alterar perfil
+  $(document).ready(function(){
+    bootstrapValidate('#name','required:Preencha este campo|min:3:Insira pelo menos 3 caracteres|alpha:Insira apenas letras');
+    bootstrapValidate('#surname','required:Preencha este campo|min:2:Insira pelo menos 2 caracteres|alpha:Insira apenas letras');
+    bootstrapValidate('#user_name','required:Preencha este campo|min:5:Insira pelo menos 5 caracteres');
+    bootstrapValidate('#email_perfil','email:Insira um endereço de email válido');
+
+    {{#if formErrors}}
+      {{#if formErrors.name}}
+        $('#name').val('{{formErrors.name.field}}');
+        $('#name').addClass('is-invalid');
+        $('#name-invalid-feedback').text('{{formErrors.name.error}}');
+      {{/if}}
+
+      {{#if formErrors.surname}}
+        $('#surname').val('{{formErrors.surname.field}}');
+        $('#surname').addClass('is-invalid');
+        $('#surname-invalid-feedback').text('{{formErrors.surname.error}}');
+      {{/if}}
+
+      {{#if formErrors.user_name}}
+        $('#user_name').val('{{formErrors.user_name.field}}');
+        $('#user_name').addClass('is-invalid');
+        $('#user_name-invalid-feedback').text('{{formErrors.user_name.error}}');
+      {{/if}}
+
+      {{#if formErrors.email}}
+        $('#email_perfil').val('{{formErrors.email.field}}');
+        $('#email_perfil').addClass('is-invalid');
+        $('#email_perfil-invalid-feedback').text('{{formErrors.email.error}}');
+      {{/if}}
+    {{/if}}
+  });
+
+  // Alterar a senha
+  $(document).ready(function(){
+    bootstrapValidate('#new_password_menu', 'required:Preencha este campo|min:5:Insira pelo menos 5 caracteres');
+    bootstrapValidate('#password_confirmation_menu', 'matches:#new_password:As senhas devem combinar');
+    {{#if formErrors}}
+      {{#if formErrors.password}}
+        $('#new_password_menu').val('{{formErrors.password.field}}');
+        $('#new_password_menu').addClass('is-invalid');
+        $('#new_password_menu-invalid-feedback').text('{{formErrors.password.error}}');
+      {{/if}}
+
+      {{#if formErrors.password_confirmation}}
+        $('#password_confirmation_menu').val('{{formErrors.password_confirmation.field}}');
+        $('#password_confirmation_menu').addClass('is-invalid');
+        $('#password_confirmation_menu-invalid-feedback').text('{{formErrors.password_confirmation.error}}');
+      {{/if}}
+    {{/if}}
+  });
+</script>

@@ -1,57 +1,69 @@
-<nav aria-label="breadcrumb">           
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
-		<li class="breadcrumb-item" aria-current="page"><a href="/admin">Área Administrativa</a></li>
-        <li class="breadcrumb-item active">Lista de Postagens</li>
-	</ol>
-</nav>
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Postagens</h1>
+            <hr>
+            <h5 class="text-center">Área administativa</h5>
+        </div>
+    </div>
+</div>
 
-<h2 class="text-center">Lista de Postagens</h2>
-<hr/>
+<div class="container">
+    <nav aria-label="breadcrumb">           
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Lista de Postagens</li>
+        </ol>
+    </nav>
 
-{{#if posts}}
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Título</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Tipo de Usuario</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Status</th>
-                <th scope="col">Alterar Status</th>
-                <th scope="col">Excluir</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each posts}}
-            <tr>
-                <td>{{title}}</td>
-                <td>{{user.user_name}}</td>
-            
-                {{#if eAdmin}}
-                    <td>Administrador</td>
-                {{else}}
-                    <td>Comum</td>
-                {{/if}}
+    <a href="/admin/postagens/add" class="btn bg-seagreen text-white mb-4" >Nova Postagem</a>
 
-                <td>{{category.name}}</td>
-                <td>{{status}}</td>
+    {{#each posts}}
+        <div class="row mb-5">
+            <div class="col-md-4">
+                <a href="/admin/postagens/edit/{{this._id}}">
+                    <img src="/img/posts/{{this.img}}" class="card-img" alt="...">
+                </a>
+            </div>
+            <div class="col-md-8 text-break">
+                <h5 class="card-title">
+                    <a href="/admin/postagens/edit/{{this._id}}" class="text-decoration-none text-seagreen">
+                        <h5>{{this.title}}</h5>
+                    </a>
+                </h5>
+                <p class="card-text">{{this.description}}</p>
 
-                <td>
-                    <a href="/admin/postagens/{{slug}}">mudar</a>
-                </td>
+                <p class="card-text">Criado por {{this.user.user_name}}, em {{#formatDate this.date}}{{/formatDate}}</p>
+                <span class="badge rounded-pill bg-greencrayola">{{this.category.name}}</span>
 
-                <form action="/admin/postagens/deletar" method="POST">
-                    <input type="hidden" name="id" value="{{_id}}"/>
-                    <td>
-                        <button type="submit" class="btn btn-danger btn-lg">X</button>
-                    </td>
+                <br>
+                <button onclick="deletarPostagem('{{this._id}}')" class="btn btn-danger mt-3">
+                    Excluir
+                </button>
+
+                <form id="form-delete" action="/admin/postagens/deletar" method="POST">
+                    <input type="hidden" name="id" id="delete-id"/>
                 </form>
-            </tr>       
-            {{/each}}
-        </tbody>
-    </table>
+            </div>
+        </div>
+    {{else}}
+        <h3 class="text-center mt-5">Não existem postagens para gerenciar</h3>
+    {{/each}}
+</div>
 
-{{else}}
-    <h3 class="text-center mt-5">Não existem postagens para gerenciar</h3>
-{{/if}}
+<script>
+    function deletarPostagem(id) {
+        swal({
+            title: "Você tem certeza ?",
+            text: "Deseja deletar esta postagem?",
+            icon: "warning",
+            buttons: ["Não", "Sim"],
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $("#delete-id").val(id);
+                $("#form-delete").submit();
+            }
+        });
+    }
+</script>

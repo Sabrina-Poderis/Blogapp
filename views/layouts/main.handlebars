@@ -1,26 +1,48 @@
 <!DOCTYPE HTML>
 <html lang="pt-br">
     <head>
+        <title>BlogApp</title>
+        <link rel="shortcut icon" href="/img/icons/favicon.png"/>
+
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=devide-width, initial-scale=1.0"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie-edge"/>
+
+        {{!-- Metadata --}}
+        <meta name="author" content="Sabrina Poderis">
+        <meta name="description" content="Blog desenvolvido em Node, sob as orientações de Victor Lima em seu Curso de Node.js">
+        <meta name="keywords" content="sites, web, desenvolvimento, express, node, mongoose, handlebars">
+        <meta property="og:locale" content="_ptBR">
+        <meta property="og:url" content="http://blogapp-sabrinapoderis.herokuapp.com">
+        <meta property="og:site_name" content="BlogApp">
+        <meta property="og:title" content="BlogApp">
+        <meta property="og:description" content="Blog desenvolvido em Node, sob as orientações de Victor Lima em seu Curso de Node.js">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="http://blogapp-sabrinapoderis.herokuapp.com/public/img/icons/favicon.png"> 
+        <meta property="og:image:type" content="image/jpeg">
+        <meta property="og:image:width" content="225"> 
+        <meta property="og:image:height" content="225"> 
+
+        {{!-- CSS --}}
+        <link rel="stylesheet" type="text/css" href="/css/style.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+        {{!-- JS --}}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <script src="bootstrap-validate.js"></script>
-        <title>Blog NodeJS</title>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="https://cdn.rawgit.com/PascaleBeier/bootstrap-validate/v2.2.0/dist/bootstrap-validate.js"></script>
     </head>
     <body>
         {{>_navbar}}
+
         {{>_msg}}
-        <div class="container my-4">            
-            {{!-- {{#if error}}
-                <div class="alert alert-danger">{{error}}</div>
-            {{/if}}                     --}}
+
+        <section class="b-font my-4">            
             {{{body}}}              
-        </div>        
+        </section>      
+
         {{>_footer}}
     </body>
-   
 </html>

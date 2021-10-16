@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="bg-greencrayola jumbotron jumbotron-fluid">
+        <div class="container-lg">
+            <h1 class="display-4 text-center">Novo Usuário</h1>
+            <hr>
+            <h5 class="text-center">Área administativa</h5>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <nav aria-label="breadcrumb">           
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/admin/usuarios">Lista de Postagens</a></li>
+            <li class="breadcrumb-item active">Novo Usuário</li>
+        </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-body mb-5">
+            <form action="/admin/usuarios/nova" method="POST" >
+                <input type="hidden" name="user_id" value="{{user._id}}"/>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label>Nome</label>
+                        <input id="name" name="name" type="text" class="form-control"/>
+                        <div id="name-invalid-feedback" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Sobrenome</label>
+                        <input id="surname" name="surname" type="text" class="form-control"/>
+                        <div id="surname-invalid-feedback" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Usuário</label>
+                        <input id="user_name" name="user_name" type="text" class="form-control"/>
+                        <div id="user_name-invalid-feedback" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>E-Mail</label>
+                        <input id="email" name="email" type="email" class="form-control"/>
+                        <div id="email-invalid-feedback" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Senha</label>
+                        <input id="password" name="password" type="password" class="form-control"/>
+                        <div id="password-invalid-feedback" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Confirme a senha</label>
+                        <input id="password_confirmation" name="password_confirmation" type="password" class="form-control"/>
+                        <div id="password_confirmation-invalid-feedback" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="text-center">                
+                        <button class="btn btn-primary mt-3" type="submit">Salvar</button>
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        bootstrapValidate('#name','required:Preencha este campo|min:3:Insira pelo menos 3 caracteres|alpha:Insira apenas letras');
+        bootstrapValidate('#surname','required:Preencha este campo|min:2:Insira pelo menos 2 caracteres|alpha:Insira apenas letras');
+        bootstrapValidate('#user_name','required:Preencha este campo|min:5:Insira pelo menos 5 caracteres');
+        bootstrapValidate('#email','email:Insira um endereço de email válido');
+        bootstrapValidate('#password', 'required:Preencha este campo|min:5:Insira pelo menos 5 caracteres');
+        bootstrapValidate('#password_confirmation', 'matches:#password:As senhas devem combinar');
+
+        {{#if formErrors}}
+            {{#if formErrors.name}}
+                $('#name').val('{{formErrors.name.field}}');
+                $('#name').addClass('is-invalid');
+                $('#name-invalid-feedback').text('{{formErrors.name.error}}');
+            {{/if}}
+
+            {{#if formErrors.surname}}
+                $('#surname').val('{{formErrors.surname.field}}');
+                $('#surname').addClass('is-invalid');
+                $('#surname-invalid-feedback').text('{{formErrors.surname.error}}');
+            {{/if}}
+
+            {{#if formErrors.user_name}}
+                $('#user_name').val('{{formErrors.user_name.field}}');
+                $('#user_name').addClass('is-invalid');
+                $('#user_name-invalid-feedback').text('{{formErrors.user_name.error}}');
+            {{/if}}
+
+            {{#if formErrors.email}}
+                $('#email').val('{{formErrors.email.field}}');
+                $('#email').addClass('is-invalid');
+                $('#email-invalid-feedback').text('{{formErrors.email.error}}');
+            {{/if}}
+
+            {{#if formErrors.password}}
+                $('#password').val('{{formErrors.password.field}}');
+                $('#password').addClass('is-invalid');
+                $('#password-invalid-feedback').text('{{formErrors.password.error}}');
+            {{/if}}
+
+            {{#if formErrors.password_confirmation}}
+                $('#password_confirmation').val('{{formErrors.password_confirmation.field}}');
+                $('#password_confirmation').addClass('is-invalid');
+                $('#password_confirmation-invalid-feedback').text('{{formErrors.password_confirmation.error}}');
+            {{/if}}
+        {{/if}}
+    });
+</script>
